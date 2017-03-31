@@ -1,57 +1,11 @@
-<!-- index.html -->
 <!DOCTYPE html>
-
-<!-- define angular app -->
-<html ng-app="drawApp">
-	<head>
-		<!-- SCROLLS -->
-		<!-- load bootstrap and fontawesome via CDN -->
-		<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" />
-		<link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.css" />
-	
-		<!-- SPELLS -->
-		<!-- load angular and angular route via CDN -->
-		<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.25/angular.min.js"></script>
-		<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.25/angular-route.js"></script>
-		<script src="script.js"></script>
-		<script src="js/heatmap.js"></script>
-
-		<link rel="shortcut icon" type="image/png" href="/favicon.png"/>
-
-		<title>Data Draw</title>
-
-		<meta charset="utf-8">
-
-		<base href="/">
-	</head>
-	
-	<!-- define angular controller -->
-    <body ng-controller="mainController">
-	
-		<!-- HEADER AND NAVBAR -->
-		<header>
-			<nav class="navbar navbar-default">
-			<div class="container">
-				<div class="navbar-header">
-					<a class="navbar-brand" href="#">Data Draw</a>
-				</div>
-				<ul class="nav navbar-nav navbar-right">
-					<li><a href="#"><i class="fa fa-home"></i> Home</a></li>
-					<li><a href="#draw"><i class="fa fa-bar-chart"></i> Draw your data</a></li>
-					<li><a href="#about"><i class="fa fa-comment"></i> About us</a></li>
-				</ul>
-			</div>
-			</nav>
-		</header>
-	
-		<!-- MAIN CONTENT AND INJECTED VIEWS -->
-		<div id="main">
-			
-			<!-- angular templating -->
-			<!-- this is where content will be injected -->
-			<div ng-view></div>
-
-		</div>
-	
-	</body>
+<html>
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" href="heatmap.css" type="text/css" />
+</head>
+<body>
+<script src="http://d3js.org/d3.v3.js"></script>
+<script src="heatmap.js"></script>
+</body>
 </html>
