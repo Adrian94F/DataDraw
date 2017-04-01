@@ -1,12 +1,9 @@
 var canvas = document.getElementById('main');
 canvas.width = 800;
 canvas.height = 600;
-var gkhead = new Image;
-var ball = new Image;
-var similarity = {};
-gkhead.src = 'http://phrogz.net/tmp/gkhead.jpg';
-ball.src = 'http://phrogz.net/tmp/alphaball.png';
+
 window.onload = function() {
+    var similarity = {};
     var context = canvas.getContext('2d');
     var scale = 1.1
     var lastX = canvas.width / 2;
@@ -107,7 +104,6 @@ window.onload = function() {
                 context.fill();
                 context.stroke();
             }
-            //context.stroke();
             context.restore();
             count++;
         }
