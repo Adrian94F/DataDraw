@@ -10,8 +10,10 @@ window.onload = function() {
     var lastY = canvas.height / 2;
     var dragStart;
     var dragged;
+    var autorColors = {};
     trackTransforms(context);
-    getSimilarity(drawStuff);
+    getSimilarity();
+    setInterval(drawStuff, 1000 / 60);
 
     function getSimilarity(callback) {
         $.ajax({
@@ -20,14 +22,16 @@ window.onload = function() {
             success: function(result) {
                 result = JSON.parse(result);
                 for (var i = 0; i < result.rowlabels.length; i++) {
+                    autorColors[result.rowlabels[i]] = getRandomColor();
                     var similarArray = [];
                     for (var j = 0; j < result.arr[i].length; j++) {
                         if (result.arr[i][j] != 0 && result.arr[i][j] != 1) {
-                            similarArray.push(result.arr[i][j]);
+                            var dict = {}
+                            dict[result.rowlabels[j]] = result.arr[i][j]
+                            similarArray.push(dict);
                         }
                     }
                     similarity[result.rowlabels[i]] = similarArray;
-                    callback();
                 }
             }
         });
@@ -44,7 +48,6 @@ window.onload = function() {
         var factor = Math.pow(scale, clicks);
         context.scale(factor, factor);
         context.translate(-pt.x, -pt.y);
-        drawStuff();
     }
 
     function getRandomColor() {
@@ -78,30 +81,55 @@ window.onload = function() {
             context.beginPath();
             context.lineWidth = 0.5;
             context.arc(x, y, radius, 0, Math.PI * 2);
-            context.fillStyle = getRandomColor();
-            context.fill();
-            context.stroke();
+            context.fillStyle = autorColors[key];
+            if (context.isPointInPath(lastX, lastY)) {
+                context.fillStyle = "#ffffff";
+                context.clearRect(0, 0, 250, 20);
+                context.fillStyle = "#000000";
+                context.font = "8px Verdana";
+                context.rect(0, 0, 250, 20);
+                context.fill();
+                context.fillStyle = "#ffffff";
+                context.fillText("Author: " + key, 0, 15);
+            } else {
+                context.fillStyle = color;
+                context.fill();
+                context.stroke();
+            }
             context.save();
             context.translate(x, y);
             for (var i = 0; i < lines; ++i) {
-                var xPoint = radius * Math.cos(i * space * Math.PI / 180);
-                var yPoint = radius * Math.sin(i * space * Math.PI / 180);
-                var length = similarity[key][i] * 100;
+                var xPoint = (radius + 0.25) * Math.cos(i * space * Math.PI / 180);
+                var yPoint = (radius + 0.25) * Math.sin(i * space * Math.PI / 180);
+                for (var key2 in similarity[key][i]) {
+                    var length = similarity[key][i][key2] * 100;
+                }
                 var xPoint2 = (radius + length) * Math.cos(i * space * Math.PI / 180);
                 var yPoint2 = (radius + length) * Math.sin(i * space * Math.PI / 180);
                 context.beginPath();
                 context.lineWidth = 0.5;
                 context.moveTo(xPoint, yPoint);
                 context.lineTo(xPoint2, yPoint2);
-                context.strokeStyle = getRandomColor();
+                for (var key3 in similarity[key][i]) {
+                    var color = autorColors[key3];
+                }
+                context.strokeStyle = color;
                 context.stroke();
-                var xPoint3 = xPoint2 + 2 * Math.cos(i * space * Math.PI / 180);
-                var yPoint3 = yPoint2 + 2 * Math.sin(i * space * Math.PI / 180);
+                var xPoint3 = xPoint2 + 4 * Math.cos(i * space * Math.PI / 180);
+                var yPoint3 = yPoint2 + 4 * Math.sin(i * space * Math.PI / 180);
                 context.beginPath();
-                context.lineWidth = 0.05;
-                context.arc(xPoint3, yPoint3, 2, 0, Math.PI * 2);
-                context.fillStyle = getRandomColor();
-                context.fill();
+                context.lineWidth = 0.5;
+                context.arc(xPoint3, yPoint3, 4, 0, Math.PI * 2);
+                if (context.isPointInPath(lastX, lastY)) {
+                    context.clearRect(0, 0, 250, 20);
+                    context.fillStyle = "#000000";
+                    context.font = "8px Verdana";
+                    context.rect(0, 0, 250, 20);
+                    context.fillStyle = color;
+                    context.fill();
+                    context.fillStyle = "#ffffff";
+                    context.fillText("Similarity: " + length + "% to " + key3, 0, 15);
+                }
                 context.stroke();
             }
             context.restore();
@@ -124,18 +152,15 @@ window.onload = function() {
         if (dragStart) {
             var pt = context.transformedPoint(lastX, lastY);
             context.translate(pt.x - dragStart.x, pt.y - dragStart.y);
-            drawStuff();
         }
     }, false);
 
     canvas.addEventListener('mouseup', function(evt) {
         dragStart = null;
-        if (!dragged) zoom(evt.shiftKey ? -1 : 1);
     }, false);
 
     canvas.addEventListener('DOMMouseScroll', handleScroll, false);
     canvas.addEventListener('mousewheel', handleScroll, false);
-
 }
 
 function trackTransforms(context) {
