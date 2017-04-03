@@ -4,7 +4,7 @@ d3.json("heatmap.json", function(error, heatmap) {
     return;
   }
   var X = 0, Y = 1;
-  var canvasDim = [600, 600];
+  var canvasDim = [1000, 1000];
   var canvasAspect = canvasDim[Y] / canvasDim[X];
   var heatmapDim = [heatmap[X].length, heatmap.length];
   var heatmapAspect = heatmapDim[Y] / heatmapDim[X];
@@ -27,7 +27,7 @@ d3.json("heatmap.json", function(error, heatmap) {
       .range([canvasDim[Y], 0])
   ];
 
-  var body = d3.select("body");
+  var body = d3.select("#heatmapdiv");
 
   var canvas = body.append("canvas")
     .attr("width", heatmapDim[X])
