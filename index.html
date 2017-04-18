@@ -32,6 +32,7 @@
 				</div>
 				<ul class="nav navbar-nav navbar-right">
 					<li><a href="#" id="mainlink"><i class="fa fa-home"></i> Home</a></li>
+					<li><a href="#" id="chartlink"><i class="fa fa-bar-chart"></i> Draw 3D chart</a></li>
 					<li><a href="#" id="heatmaplink"><i class="fa fa-bar-chart"></i> Draw 1st heat map</a></li>
 					<li><a href="#" id="heatmap2link"><i class="fa fa-bar-chart"></i> Draw 2nd heat map</a></li>
 					<li><a href="#" id="cellslink"><i class="fa fa-bar-chart"></i> Draw cells map</a></li>
@@ -43,7 +44,24 @@
 		<div id="main">
 			<div class="jumbotron text-center">
 				<h1>Hello!</h1>
-				Please select your file, or just run demo.
+				Welcome to data drawing page!
+			</div>
+
+			<div class="jumbotron text-center">
+				<h2>Data input:</h2>
+				<button type="button" class="btn">Select fle</button>
+				<h2>Color scale:</h2>
+				<div style="width: 250px; margin: auto;">
+					<div class="radio">
+						<label><input type="radio" name="optradio">Green to red</label>
+					</div>
+					<div class="radio">
+						<label><input type="radio" name="optradio">Red to green</label>
+					</div>
+					<div class="radio disabled">
+						<label><input type="radio" name="optradio">Some other colors</label>
+					</div>
+				</div>
 			</div>
 		</div>
 
@@ -58,10 +76,18 @@
 		<div id="cells" align="center" style="display:none">
 			<img src="images/cells.png" alt="cells map">
 		</div>
+
+		<div id="chart" align="center" style="display:none">
+			<div id="chartdiv" style="width: 1200px; height: 800px;"></div>
+		</div>
 	
 		<!-- heatmap -->
 		<script src="http://d3js.org/d3.v3.js"></script>
 		<script src="heatmap.js"></script>
+
+		<!-- chart -->
+        <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+        <script src="chart.js"></script>
 
 		<script type="text/javascript"> 
 		$(document).ready(function(){
@@ -70,7 +96,8 @@
 				$("#main").show();
 				$("#heatmap").hide();
 				$("#heatmap2").hide();
-				$("#cells").hide();
+                $("#cells").hide();
+                $("#chart").hide();
 			});
 
 			$("#heatmaplink").click(function(event){
@@ -78,6 +105,7 @@
 				$("#heatmap").show();
 				$("#heatmap2").hide();
 				$("#cells").hide();
+                $("#chart").hide();
 			});
 
 			$("#heatmap2link").click(function(event){
@@ -85,14 +113,24 @@
 				$("#heatmap").hide();
 				$("#heatmap2").show();
 				$("#cells").hide();
+                $("#chart").hide();
 			});
 
-			$("#cellslink").click(function(event){
-				$("#main").hide();
-				$("#heatmap").hide();
-				$("#heatmap2").hide();
-				$("#cells").show();
-			});
+            $("#cellslink").click(function(event){
+                $("#main").hide();
+                $("#heatmap").hide();
+                $("#heatmap2").hide();
+                $("#cells").show();
+                $("#chart").hide();
+            });
+
+            $("#chartlink").click(function(event){
+                $("#main").hide();
+                $("#heatmap").hide();
+                $("#heatmap2").hide();
+                $("#cells").hide();
+                $("#chart").show();
+            });
 		});
 		</script>
 
