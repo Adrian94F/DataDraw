@@ -1,4 +1,4 @@
-d3.json("data/1/distance.json", function(error, heatmap) {
+d3.json("data/1/similarity.json", function(error, heatmap) {
     if (error) {
         alert("Unable to load file: " + error);
         return;
