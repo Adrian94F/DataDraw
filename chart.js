@@ -379,13 +379,15 @@ var data = {x: x, y: y, z: z, type: 'surface',
         cmax: 0.35
     }
 };
+var width = $("#drawingCanvas").width;
+var height = window.innerHeight - 100;
 var layout = {
     scene:{zaxis:{
 
         // range: [0.25, 0.35],
     },},
-    width: 1200,
-    height: 800,
+    width: width,
+    height: height,
     margin: {
         l: 50,
         r: 50,
@@ -396,4 +398,6 @@ var layout = {
 
 };
 // Plotting the surfaces..
-Plotly.newPlot('chartdiv', [data], layout);
+function daveChart() {
+    Plotly.newPlot('drawingCanvas', [data], layout);
+}

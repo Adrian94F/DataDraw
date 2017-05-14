@@ -15,3 +15,6 @@
 .axis .tick:first-child {
   display: none;
 }
+.row {
+  height: 100%;
+}

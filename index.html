@@ -18,11 +18,11 @@
 		<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" />
 		<link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.css" />
 		<link rel="shortcut icon" type="image/png" href="favicon.png"/>
-		<link rel="stylesheet" href="styles/heatmap.css" type="text/css" />
+		<link rel="stylesheet" href="style.css" type="text/css" />
 		<title>Data Draw</title>
 		<meta charset="utf-8">
 	</head>
-    <body>
+    <body id="drop_zone">
     	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 		<header>
 			<nav class="navbar navbar-default">
@@ -41,45 +41,33 @@
 			</nav>
 		</header>
 		
-		<div id="main">
-			<div class="jumbotron text-center">
-				<h1>Hello!</h1>
-				Welcome to data drawing page!
-			</div>
+		<div id="main" >
+            <div class="col-md-4">
+                <h3>Data input:</h3>
+                <div id="drop">Drop file into the window</div>
+                <output id="list"></output>
 
-			<div class="jumbotron text-center">
-				<h2>Data input:</h2>
-				<button type="button" class="btn">Select file</button>
-				<h2>Color scale:</h2>
-				<div style="width: 250px; margin: auto;">
-					<div class="radio">
-						<label><input type="radio" name="optradio">Green to red</label>
-					</div>
-					<div class="radio">
-						<label><input type="radio" name="optradio">Red to green</label>
-					</div>
-					<div class="radio disabled">
-						<label><input type="radio" name="optradio">Some other colors</label>
-					</div>
-				</div>
-			</div>
+
+                <h3>Color scale:</h3>
+                <div class="radio">
+                    <label><input type="radio" name="optradio">Green to red</label>
+                </div>
+                <div class="radio">
+                    <label><input type="radio" name="optradio">Red to green</label>
+                </div>
+                <div class="radio disabled">
+                    <label><input type="radio" name="optradio">Some other colors</label>
+                </div>
+            </div>
+
+            <div class="col-md-8">
+                <div id="drawingCanvas"></div>
+            </div>
+
 		</div>
 
-		<div id="heatmap" align="center" style="display:none">
-			<div id="heatmapdiv"></div>
-		</div>
-
-		<div id="heatmap2" align="center" style="display:none">
-			<img src="images/heatmap2.png" alt="heat map">
-		</div>
-
-		<div id="cells" align="center" style="display:none">
-			<img src="images/cells.png" alt="cells map">
-		</div>
-
-		<div id="chart" align="center" style="display:none">
-			<div id="chartdiv" style="width: 1200px; height: 800px;"></div>
-		</div>
+        <!-- main -->
+        <script src="main.js"></script>
 	
 		<!-- heatmap -->
 		<script src="http://d3js.org/d3.v3.js"></script>
@@ -88,51 +76,5 @@
 		<!-- chart -->
         <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
         <script src="chart.js"></script>
-
-		<script type="text/javascript"> 
-		$(document).ready(function(){
-
-			$("#mainlink").click(function(event){
-				$("#main").show();
-				$("#heatmap").hide();
-				$("#heatmap2").hide();
-                $("#cells").hide();
-                $("#chart").hide();
-			});
-
-			$("#heatmaplink").click(function(event){
-				$("#main").hide();
-				$("#heatmap").show();
-				$("#heatmap2").hide();
-				$("#cells").hide();
-                $("#chart").hide();
-			});
-
-			$("#heatmap2link").click(function(event){
-				$("#main").hide();
-				$("#heatmap").hide();
-				$("#heatmap2").show();
-				$("#cells").hide();
-                $("#chart").hide();
-			});
-
-            $("#cellslink").click(function(event){
-                $("#main").hide();
-                $("#heatmap").hide();
-                $("#heatmap2").hide();
-                $("#cells").show();
-                $("#chart").hide();
-            });
-
-            $("#chartlink").click(function(event){
-                $("#main").hide();
-                $("#heatmap").hide();
-                $("#heatmap2").hide();
-                $("#cells").hide();
-                $("#chart").show();
-            });
-		});
-		</script>
-
 	</body>
 </html>
