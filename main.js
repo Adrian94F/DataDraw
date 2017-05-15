@@ -37,10 +37,7 @@ $(document).ready(function(){
     function handleFileSelect(evt) {
         evt.stopPropagation();
         evt.preventDefault();
-
-        var files = evt.dataTransfer.files; // FileList object.
-
-        // files is a FileList of File objects. List some properties.
+        var files = evt.dataTransfer.files;
         var output = [];
         var f = files[0];
         output.push('<li><strong>', escape(f.name), '</strong> (',
@@ -49,7 +46,7 @@ $(document).ready(function(){
             '</li>');
         document.getElementById('drop').innerText = "";
         document.getElementById('list').innerHTML = '<ul>' + output.join('') + '</ul>';
-        jsonFile = JSON.parse(f);
+        jsonFile = JSON.parse(JSON.stringify(f));
     }
 
     function handleDragOver(evt) {
