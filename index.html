@@ -1,100 +1,172 @@
 <!DOCTYPE html>
-<html>
-<head>
 <meta charset="utf-8">
-</head>
+<script src="http://d3js.org/d3.v2.min.js?2.9.3"></script>
+
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
+    crossorigin="anonymous">
+<link rel="stylesheet" href="css/syles.css">
+
 <body>
+    <!--<button type="submit" onclick="readData()" style="width:200px; height:200px;" ></button>-->
+    <!--<script src="scripts/filter.js"/>-->
+    <div class="container">
+        <input class="form-control" type="file" id="files" name="files" />
+        <button onclick="displayData()" class="btn btn-default">Wyswietl dane</button>
+        <output id="list"></output>
+    </div>
+    <script>
+        function displayData() {
+            draw(getData());
+            /*            document.getElementById('list').innerHTML = getAuthors(getData());*/
+        }
+    </script>
+
+    <script>
+        var data;
+        function handleFileSelect(evt) {
+            var files = evt.target.files;
+
+            var file = files[0];
+
+            var reader = new FileReader();
+
+            reader.onload = function (e) {
+                data = reader.result;
+            }
+
+            reader.readAsText(file);
+        }
+
+        function getData() {
+            return data;
+        }
+
+        document.getElementById('files').addEventListener('change', handleFileSelect, false);
+    </script>
+
+    <svg width="960" height="600"></svg>
+    <script src="https://d3js.org/d3.v4.min.js"></script>
+    <script>
+        draw = function (json) {
+            var svg = d3.select("svg"),
+                width = +svg.attr("width"),
+                height = +svg.attr("height");
+
+            var color = d3.scaleOrdinal(d3.schemeCategory20);
+
+            var simulation = d3.forceSimulation()
+                .force("link", d3.forceLink().id(function (d) { return d.id; }))
+                .force("charge", d3.forceManyBody())
+                .force("center", d3.forceCenter(width / 2, height / 2));
+
+            graph = JSON.parse(json);
+
+            var link = svg.append("g")
+                .attr("class", "links")
+                .selectAll("line")
+                .data(graph.links)
+                .enter().append("line")
+                .attr("stroke-width", function (d) { return Math.sqrt(d.value); });
+
+            var node = svg.append("g")
+                .attr("class", "nodes")
+                .selectAll("circle")
+                .data(graph.nodes)
+                .enter().append("circle")
+                .attr("r", 5)
+                .attr("fill", function (d) { return color(d.group); })
+                .call(d3.drag()
+                    .on("start", dragstarted)
+                    .on("drag", dragged)
+                    .on("end", dragended));
+
+            node.append("title")
+                .text(function (d) { return d.id; });
+
+            simulation
+                .nodes(graph.nodes)
+                .on("tick", ticked);
+
+            simulation.force("link")
+                .links(graph.links);
+
+            function ticked() {
+                link
+                    .attr("x1", function (d) { return d.source.x; })
+                    .attr("y1", function (d) { return d.source.y; })
+                    .attr("x2", function (d) { return d.target.x; })
+                    .attr("y2", function (d) { return d.target.y; });
+
+                node
+                    .attr("cx", function (d) { return d.x; })
+                    .attr("cy", function (d) { return d.y; });
+            }
+
+           /* d3.json(json, function (error, graph) {
+                if (error) throw error;
+
+                var link = svg.append("g")
+                    .attr("class", "links")
+                    .selectAll("line")
+                    .data(graph.links)
+                    .enter().append("line")
+                    .attr("stroke-width", function (d) { return Math.sqrt(d.value); });
+
+                var node = svg.append("g")
+                    .attr("class", "nodes")
+                    .selectAll("circle")
+                    .data(graph.nodes)
+                    .enter().append("circle")
+                    .attr("r", 5)
+                    .attr("fill", function (d) { return color(d.group); })
+                    .call(d3.drag()
+                        .on("start", dragstarted)
+                        .on("drag", dragged)
+                        .on("end", dragended));
+
+                node.append("title")
+                    .text(function (d) { return d.id; });
+
+                simulation
+                    .nodes(graph.nodes)
+                    .on("tick", ticked);
+
+                simulation.force("link")
+                    .links(graph.links);
+
+                function ticked() {
+                    link
+                        .attr("x1", function (d) { return d.source.x; })
+                        .attr("y1", function (d) { return d.source.y; })
+                        .attr("x2", function (d) { return d.target.x; })
+                        .attr("y2", function (d) { return d.target.y; });
+
+                    node
+                        .attr("cx", function (d) { return d.x; })
+                        .attr("cy", function (d) { return d.y; });
+                }
+            });*/
+
+            function dragstarted(d) {
+                if (!d3.event.active) simulation.alphaTarget(0.3).restart();
+                d.fx = d.x;
+                d.fy = d.y;
+            }
+
+            function dragged(d) {
+                d.fx = d3.event.x;
+                d.fy = d3.event.y;
+            }
+
+            function dragended(d) {
+                if (!d3.event.active) simulation.alphaTarget(0);
+                d.fx = null;
+                d.fy = null;
+            }
+        }
+    </script>
+
+    <script src="scripts/filter.js" />
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+
 </body>
-</html>
-
-<!-- index.html -->
-<!DOCTYPE html>
-
-<!-- define angular app -->
-<html ng-app="drawApp">
-	<head>
-		<!-- SCROLLS -->
-		<!-- load bootstrap and fontawesome via CDN -->
-		<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" />
-		<link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.css" />
-		<link rel="shortcut icon" type="image/png" href="favicon.png"/>
-		<link rel="stylesheet" href="styles/heatmap.css" type="text/css" />
-		<title>Data Draw</title>
-		<meta charset="utf-8">
-	</head>
-    <body>
-    	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-		<header>
-			<nav class="navbar navbar-default">
-			<div class="container">
-				<div class="navbar-header">
-					<a class="navbar-brand" href="#">Data Draw</a>
-				</div>
-				<ul class="nav navbar-nav navbar-right">
-					<li><a href="#" id="mainlink"><i class="fa fa-home"></i> Home</a></li>
-					<li><a href="#" id="heatmaplink"><i class="fa fa-bar-chart"></i> Draw 1st heat map</a></li>
-					<li><a href="#" id="heatmap2link"><i class="fa fa-bar-chart"></i> Draw 2nd heat map</a></li>
-					<li><a href="#" id="cellslink"><i class="fa fa-bar-chart"></i> Draw cells map</a></li>
-				</ul>
-			</div>
-			</nav>
-		</header>
-		
-		<div id="main">
-			<div class="jumbotron text-center">
-				<h1>Hello!</h1>
-				Please select your file, or just run demo.
-			</div>
-		</div>
-
-		<div id="heatmap" align="center" style="display:none">
-			<div id="heatmapdiv"></div>
-		</div>
-
-		<div id="heatmap2" align="center" style="display:none">
-			<img src="images/heatmap2.png" alt="heat map">
-		</div>
-
-		<div id="cells" align="center" style="display:none">
-			<img src="images/cells.png" alt="cells map">
-		</div>
-	
-		<!-- heatmap -->
-		<script src="http://d3js.org/d3.v3.js"></script>
-		<script src="heatmap.js"></script>
-
-		<script type="text/javascript"> 
-		$(document).ready(function(){
-
-			$("#mainlink").click(function(event){
-				$("#main").show();
-				$("#heatmap").hide();
-				$("#heatmap2").hide();
-				$("#cells").hide();
-			});
-
-			$("#heatmaplink").click(function(event){
-				$("#main").hide();
-				$("#heatmap").show();
-				$("#heatmap2").hide();
-				$("#cells").hide();
-			});
-
-			$("#heatmap2link").click(function(event){
-				$("#main").hide();
-				$("#heatmap").hide();
-				$("#heatmap2").show();
-				$("#cells").hide();
-			});
-
-			$("#cellslink").click(function(event){
-				$("#main").hide();
-				$("#heatmap").hide();
-				$("#heatmap2").hide();
-				$("#cells").show();
-			});
-		});
-		</script>
-
-	</body>
-</html>
