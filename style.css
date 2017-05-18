@@ -18,3 +18,27 @@
 .row {
   height: 100%;
 }
+
+body {
+  background-color: #fcfcfc;
+}
+
+.canvas {
+  background-color: #fff;
+  width: 94vh;
+}
+
+.fullh {
+  padding-bottom: 100%;
+  padding-top: 1%;
+  margin-bottom: -100%;
+  overflow: hidden;
+}
+
+body,
+div {
+  margin: 0;
+  border: 0 none;
+  padding: 0;
+}
+

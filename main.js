@@ -7,24 +7,19 @@ $(document).ready(function(){
     $("#drawingCanvas").height = window.innerHeight;
 
     $("#mainlink").click(function(event){
-        $("#drawingCanvas").html("");
     });
 
     $("#heatmaplink").click(function(event){
-        $("#drawingCanvas").html("");
         d3map();
     });
 
     $("#heatmap2link").click(function(event){
-        $("#drawingCanvas").html("");
     });
 
     $("#cellslink").click(function(event){
-        $("#drawingCanvas").html("");
     });
 
     $("#chartlink").click(function(event){
-        $("#drawingCanvas").html("");
         daveChart();
     });
 
@@ -59,4 +54,13 @@ $(document).ready(function(){
     var dropZone = document.getElementById('drop_zone');
     dropZone.addEventListener('dragover', handleDragOver, false);
     dropZone.addEventListener('drop', handleFileSelect, false);
+
+    $(document).ready(function() {
+        $('input[type=radio][name=colorRadio]').change(function() {
+            d3map();
+        });
+        $('input[type=radio][name=scaleRadio]').change(function() {
+            d3map();
+        });
+    });
 });
