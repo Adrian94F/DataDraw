@@ -68,10 +68,16 @@ function d3mapDraw(filename, mapDomain, mapScale) {
         var axis = [
             d3.svg.axis()
                 .scale(scale[X])
+                .tickFormat(function(d) {
+                    return heatmap.rowlabels[d];
+                })
                 .orient("top")
                 .ticks(heatmapDim[X] / 10),
             d3.svg.axis()
                 .scale(scale[Y])
+                .tickFormat(function(d) {
+                    return heatmap.rowlabels[d];
+                })
                 .orient("right")
                 .ticks(heatmapDim[Y] / 10)
         ];
