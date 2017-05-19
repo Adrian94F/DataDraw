@@ -6,9 +6,6 @@ $(document).ready(function(){
 
     $("#drawingCanvas").height = window.innerHeight;
 
-    $("#mainlink").click(function(event){
-    });
-
     $("#heatmaplink").click(function(event){
         d3map();
     });
