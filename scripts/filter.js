@@ -1,57 +1,108 @@
+splitTitleFromAuthor = function (json) {
+    var data = JSON.parse(json);
 
-splitAuthorsForDistanceAndSimilarity = function (json) {
-    return splitAuthors(json);
-}
+    var rowlabels = [];
 
-// Return parsed JSON containing author labels and their comparison with other authors
-var splitAuthors = function (json) {
+    for (var i = 0; i < data.rowlabels.length; i++) {
+        var book = data.rowlabels[i].split("_");
+        var author = book[0];
+        var title = book[1];
 
-    var authorsDataArray = [];
-    var objects = JSON.parse(json);
-
-    for (var i = 0; i < objects.rowlabels.length; i++) {
-        var authorData = {
-            author: objects.rowlabels[i],
-            arr: objects.arr[i]
+        var rowlabel = {
+            author: author,
+            title: title
         }
-        authorsDataArray.push(authorData);
+
+        rowlabels.push(rowlabel);
     }
 
-    return { rowlabels: objects.rowlabels, authorData: authorsDataArray };
-}
+    var arr;
+    var clusters;
+    var collabels;
 
-splitAuthorsForClusters = function (json) {
+    var newData = {};
+    newData.rowlabels = rowlabels;
 
-    var authorsDataArray = [];
-    var objects = JSON.parse(json);
-
-    for (var i = 0; i < objects.rowlabels.length; i++) {
-        var authorData = {
-            author: objects.rowlabels[i],
-            clusters: objects.clusters[i]
-        }
-        authorsDataArray.push(authorData);
+    if (data.arr) {
+        arr = data.arr;
+        newData.arr = arr;
     }
 
-    return { rowlabels: objects.rowlabels, authorData: authorsDataArray }
-}
-
-splitAuthorsForTransformAndWeighted = function (json) {
-
-    var authorsDataArray = [];
-    var objects = JSON.parse(json);
-
-    for (var i = 0; i < objects.rowlabels.length; i++) {
-        var authorData = {
-            author: objects.rowlabels[i],
-            arr: objects.arr[i],
-            collabels: objects.collabels[i]
-        }
-        authorsDataArray.push(authorData);
+    if (data.clusters) {
+        clusers = data.clusters;
+        newData.clusters = clusters;
     }
 
-    return { rowlabels: objects.rowlabels, authorData: authorsDataArray }
+    if (data.collabels) {
+        collabels = data.collabels;
+        newData.collabels = collabels;
+    }
+
+    return JSON.stringify(newData);
 }
+
+filterByBook = function (json, book) {
+    var data = JSON.parse(json);
+    var rowlabels = data.rowlabels;
+    var bookIndex = rowlabels.findIndex((element) => element.author === book.author && element.title === book.title);
+
+    if (bookIndex === -1) {
+        return "No results";
+    }
+
+    var result = { rowlabels: rowlabels, book: rowlabels[bookIndex] };
+
+    if (data.arr) {
+        console.log("in arr");
+        result.arr = data.arr[bookIndex];
+    }
+
+    if (data.clusters) {
+        result.clusters = data.clusters[bookIndex];
+    }
+
+    if (data.collabels) {
+        result.collabels = data.collabels[bookIndex];
+    }
+
+    return JSON.stringify(result);
+
+}
+
+filterByBookAndScore = function (json, book, score) {
+    var data = JSON.parse(json);
+    var rowlabels = data.rowlabels;
+
+    var bookIndex = rowlabels.findIndex((element) => element.author === book.author && element.title === book.title);
+
+    if (bookIndex === -1) {
+        return "No results";
+    }
+
+
+    if (!data.arr) {
+        return "No data to filter";
+    }
+
+    var arr = data.arr[bookIndex];
+
+    var filteredRowlabels = [];
+    var filteredScores = [];
+
+
+
+    for (var i = 0; i < rowlabels.length; i++) {
+
+        if (arr[i] >= score) {
+
+            filteredRowlabels.push(rowlabels[i]);
+            filteredScores.push(arr[i]);
+        }
+    }
+
+    return JSON.stringify({ rowlabels: filteredRowlabels, arr: filteredScores });
+}
+
 
 
 
