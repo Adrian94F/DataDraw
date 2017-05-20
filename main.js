@@ -52,12 +52,10 @@ $(document).ready(function(){
     dropZone.addEventListener('dragover', handleDragOver, false);
     dropZone.addEventListener('drop', handleFileSelect, false);
 
-    $(document).ready(function() {
-        $('input[type=radio][name=colorRadio]').change(function() {
-            d3map();
-        });
-        $('input[type=radio][name=scaleRadio]').change(function() {
-            d3map();
-        });
+    $('input[type=radio][name=colorRadio]').change(function() {
+        d3map();
+    });
+    $('input[type=radio][name=scaleRadio]').change(function() {
+        d3map();
     });
 });
