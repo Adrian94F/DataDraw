@@ -14,9 +14,8 @@
     </div>
     <script>
         function displayData() {
-            /*Sorry for that one*/
-            console.log(filterByBook(splitTitleFromAuthor(getData()), { author: "orzeszkowa", title: "dziurdziowie" }));
-            document.getElementById("list").innerHTML = filterByBookAndScore(splitTitleFromAuthor(getData()), { author: "orzeszkowa", title: "dziurdziowie" }, 0.9);
+            console.log(filterByBook(splitTitleFromAuthorForJson(getData()), { author: "orzeszkowa", title: "dziurdziowie" }));
+            document.getElementById("list").innerHTML = filterByBookAndScore(splitTitleFromAuthorForJson(getData()), { author: "orzeszkowa", title: "dziurdziowie", part: "23" }, 0.8);
 
         }
     </script>
