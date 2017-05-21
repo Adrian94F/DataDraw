@@ -91,14 +91,15 @@ function d3mapDraw(filename, mapDomain, mapScale) {
                 .attr("class", "x axis")
                 .attr("transform", "translate(0," + canvasDim[Y] + ")")
                 .call(axis[X])
-                .selectAll("text")
-                .style("text-anchor", "end")
-                .attr("dx", "-.8em")
-                .attr("dy", ".15em")
-                .attr("transform", "rotate(25)"),
+            ,
             svg.append("g")
                 .attr("class", "y axis")
         ];
+
+        function drawAxes() {
+            axisElement[X].call(axis[X]).selectAll("text").attr("transform", "rotate(90)").style("text-anchor", "end").attr("dy", ".15em");
+            axisElement[Y].call(axis[Y]);
+        }
 
         var context = canvas.node().getContext("2d");
         var imageObj;
@@ -127,12 +128,6 @@ function d3mapDraw(filename, mapDomain, mapScale) {
                 function (v, i) {
                     return v / canvasDim[i]
                 });
-        }
-
-        function drawAxes() {
-            axisElement.forEach(function (v, i) {
-                v.call(axis[i])
-            });
         }
 
         function zoomEvent() {
