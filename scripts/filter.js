@@ -4,12 +4,6 @@ splitTitleFromAuthorForJson = function (json) {
     return JSON.stringify(newData);
 }
 
-splitTitleFromAuthorForJsonWithPartIncluded = function (json) {
-    var data = JSON.parse(json);
-    var newData = splitTitleFromAuthorForObjectWithPart(data);
-    return JSON.stringify(newData);
-}
-
 splitTitleFromAuthorForObject = function (object) {
     var rowlabels = [];
 

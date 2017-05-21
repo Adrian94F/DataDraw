@@ -1,5 +1,38 @@
 <!DOCTYPE html>
 <meta charset="utf-8">
+
+<style>
+    .link {
+        fill: none;
+        stroke: #666;
+        stroke-width: 1.5px;
+    }
+
+    #licensing {
+        fill: green;
+    }
+
+    .link.licensing {
+        stroke: green;
+    }
+
+    .link.resolved {
+        stroke-dasharray: 0, 2 1;
+    }
+
+    circle {
+        fill: #ccc;
+        stroke: #333;
+        stroke-width: 1.5px;
+    }
+
+    text {
+        font: 10px sans-serif;
+        pointer-events: none;
+        text-shadow: 0 1px 0 #fff, 1px 0 0 #fff, 0 -1px 0 #fff, -1px 0 0 #fff;
+    }
+</style>
+
 <script src="http://d3js.org/d3.v2.min.js?2.9.3"></script>
 
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
@@ -7,21 +40,48 @@
 <link rel="stylesheet" href="css/syles.css">
 
 <body>
+
+    <label class="btn btn-default btn-file">
+            Wybierz plik   
+            <input type="file" id="files" name="files" style="display: none;"/>
+    </label>
+    <button onclick="displayData()" class="btn btn-default">Wyswietl dane</button>
+    <form class="form-inline" id="books" name="books" style="visibility: hidden">
+        <div class="form-group">
+            <label for="sel1">Dostępne książki:</label>
+            <select class="form-control" id="sel1">  </select>
+        </div>
+
+        <label>
+          <input type="checkbox" id="filterCheckbox" name="filterCheckbox"> Filtruj
+        </label>
+    </form>
     <div class="container">
-        <input class="form-control" type="file" id="files" name="files" />
-        <button onclick="displayData()" class="btn btn-default">Wyswietl dane</button>
         <output id="list"></output>
     </div>
+
     <script>
         function displayData() {
-            console.log(filterByBook(splitTitleFromAuthorForJson(getData()), { author: "orzeszkowa", title: "dziurdziowie", part: "18" }));
-            //document.getElementById("list").innerHTML = filterByBookAndScore(splitTitleFromAuthorForJson(getData()), { author: "orzeszkowa", title: "dziurdziowie", part: "23" }, 0.8);
+            console.log("in");
+            var filterEnabled = document.getElementById("filterCheckbox").checked;
+            if (filterEnabled) {
+                console.log("in 2");
+                var data = getData();
+                var select = document.getElementById("sel1");
+                var book = select.options[select.selectedIndex].text;
+                var details = book.split(" ");
+                document.getElementById("list").innerHTML = filterByBook(data, { author: details[0], title: details[1], part: details[2] });
+            } else {
+                console.log("in 3");
+                document.getElementById("list").innerHTML = getData();
+            }
 
         }
     </script>
 
     <script src="scripts/filter.js"></script>
     <script src="scripts/files.js"></script>
+    <script src="scripts/graph.js"></script>
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 
 </body>
