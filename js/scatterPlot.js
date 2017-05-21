@@ -1,11 +1,5 @@
-var similarity = [];
-var similarity2 = [];
-var similarity3 = [];
-var similarity4 = [];
-var rowLabelNames = [];
 var bookData;
 var originalData;
-var currentBook = [];
 
 function bubble(book_1, book_2, sim) {
     this.x = book_1;
@@ -13,126 +7,136 @@ function bubble(book_1, book_2, sim) {
     this.z = sim;
 }
 
-d3.json("sim2.json", function (data) {
-    var select = document.getElementById("select");
-    originalData = data;
+function drawAllData() {
+    var similarity = [];
+    var similarity2 = [];
+    var similarity3 = [];
+    var similarity4 = [];
+    var rowLabelNames = [];
+    d3.json("sim2.json", function (data) {
+        var select = document.getElementById("select");
+        originalData = data;
 
-    for (var i = 0; i < data.rowlabels.length; i++) {
-        for (var j = 0; j < data.arr[i].length; j++) {
-            if (data.arr[i][j] <= 0.25) {
-                similarity.push(new bubble(i, j, data.arr[i][j]));
-            } else if (data.arr[i][j] > 0.25 && data.arr[i][j] <= 0.5) {
-                similarity2.push(new bubble(i, j, data.arr[i][j]));
-            } else if (data.arr[i][j] > 0.5 && data.arr[i][j] <= 0.75) {
-                similarity3.push(new bubble(i, j, data.arr[i][j]));
-            } else if (data.arr[i][j] > 0.75) {
-                similarity4.push(new bubble(i, j, data.arr[i][j]));
+        for (var i = 0; i < data.rowlabels.length; i++) {
+            for (var j = 0; j < data.arr[i].length; j++) {
+                if (data.arr[i][j] <= 0.25) {
+                    similarity.push(new bubble(i, j, data.arr[i][j]));
+                } else if (data.arr[i][j] > 0.25 && data.arr[i][j] <= 0.5) {
+                    similarity2.push(new bubble(i, j, data.arr[i][j]));
+                } else if (data.arr[i][j] > 0.5 && data.arr[i][j] <= 0.75) {
+                    similarity3.push(new bubble(i, j, data.arr[i][j]));
+                } else if (data.arr[i][j] > 0.75) {
+                    similarity4.push(new bubble(i, j, data.arr[i][j]));
+                }
             }
+            rowLabelNames.push(data.rowlabels[i]);
+            select.options[select.options.length] = new Option(data.rowlabels[i], data.rowlabels[i]);
         }
-        rowLabelNames.push(data.rowlabels[i]);
-        select.options[select.options.length] = new Option(data.rowlabels[i], data.rowlabels[i]);
-    }
 
-    var obj = {name: "0-25% similarity", data: similarity, color: "#3333FF", turboThreshold: 100000};
-    var obj2 = {name: "26-50% similarity", data: similarity2, color: "#66B2FF", turboThreshold: 100000};
-    var obj3 = {name: "51-75% similarity", data: similarity3, color: "#FFB266", turboThreshold: 100000};
-    var obj4 = {name: "76-100% similarity", data: similarity4, color: "#FF3333", turboThreshold: 100000};
+        var obj = {name: "0-25% similarity", data: similarity, color: "#3333FF", turboThreshold: 100000};
+        var obj2 = {name: "26-50% similarity", data: similarity2, color: "#66B2FF", turboThreshold: 100000};
+        var obj3 = {name: "51-75% similarity", data: similarity3, color: "#FFB266", turboThreshold: 100000};
+        var obj4 = {name: "76-100% similarity", data: similarity4, color: "#FF3333", turboThreshold: 100000};
 
-    Highcharts.chart('container', {
-        chart: {
-            type: 'scatter',
-            zoomType: 'xy',
-            panning: true,
-            panKey: 'shift'
-        },
-        title: {
-            text: "Similarity's visualization"
-        },
-        subtitle: {
-            text: 'Books'
-        },
-        xAxis: {
-            title: {
-                enabled: true,
-                text: 'Book'
+        Highcharts.chart('container', {
+            chart: {
+                type: 'scatter',
+                zoomType: 'xy',
+                panning: true,
+                panKey: 'shift'
             },
-            labels: {
-                formatter: function () {
-                    return rowLabelNames[this.value];
-                }
-            }
-        },
-        zAxis: {
             title: {
-                enabled: true
-            }
-        },
-        yAxis: {
-            title: {
-                enabled: true,
-                text: 'Book'
+                text: "Similarity's visualization"
             },
-            labels: {
-                formatter: function () {
-                    return rowLabelNames[this.value];
+            subtitle: {
+                text: 'Books'
+            },
+            xAxis: {
+                title: {
+                    enabled: true,
+                    text: 'Book'
+                },
+                labels: {
+                    formatter: function () {
+                        return rowLabelNames[this.value];
+                    }
                 }
-            }
-        },
-        tooltip: {
-            formatter: function () {
-                return 'Book 1:  ' + rowLabelNames[this.x] + '<br>' +
-                    'Book 2: ' + rowLabelNames[this.y] + '<br>' +
-                    'Similarity: ' + data.arr[this.x][this.y];
-            }
-        },
-        legend: {
-            layout: 'vertical',
-            align: 'left',
-            verticalAlign: 'top',
-            floating: true,
-            backgroundColor: (Highcharts.theme) || '#FFFFFF',
-            borderWidth: 1
-        },
-        plotOptions: {
-            scatter: {
-                marker: {
-                    radius: 5,
+            },
+            zAxis: {
+                title: {
+                    enabled: true
+                }
+            },
+            yAxis: {
+                title: {
+                    enabled: true,
+                    text: 'Book'
+                },
+                labels: {
+                    formatter: function () {
+                        return rowLabelNames[this.value];
+                    }
+                }
+            },
+            tooltip: {
+                formatter: function () {
+                    return 'Book 1:  ' + rowLabelNames[this.x] + '<br>' +
+                        'Book 2: ' + rowLabelNames[this.y] + '<br>' +
+                        'Similarity: ' + data.arr[this.x][this.y];
+                }
+            },
+            legend: {
+                layout: 'vertical',
+                align: 'left',
+                verticalAlign: 'top',
+                floating: true,
+                backgroundColor: (Highcharts.theme) || '#FFFFFF',
+                borderWidth: 1
+            },
+            plotOptions: {
+                scatter: {
+                    marker: {
+                        radius: 5,
+                        states: {
+                            hover: {
+                                enabled: true,
+                                lineColor: 'rgb(100,100,100)'
+                            }
+                        }
+                    },
                     states: {
                         hover: {
-                            enabled: true,
-                            lineColor: 'rgb(100,100,100)'
-                        }
-                    }
-                },
-                states: {
-                    hover: {
-                        marker: {
-                            enabled: false
+                            marker: {
+                                enabled: false
+                            }
                         }
                     }
                 }
-            }
-        },
-        series: [obj, obj2, obj3, obj4]
+            },
+            series: [obj, obj2, obj3, obj4]
+        });
     });
-});
+}
 
 function changeBook() {
     var val = document.getElementById("select").value;
-    var names = val.split("_");
-    similarity = [];
-    similarity2 = [];
-    similarity3 = [];
-    similarity4 = [];
-    rowLabelNames = [];
-    currentBook = [];
-
-    bookData = JSON.parse(filterByBook(splitTitleFromAuthorForJsonWithPartIncluded(originalData), {author: names[0], title: names[1]}));
-    console.log(bookData);
-    draw();
+    if(val === 'all') {
+        drawAllData();
+    } else {
+        var names = val.split("_");
+        bookData = JSON.parse(filterByBook(splitTitleFromAuthorForObject(originalData), {author: names[0], title: names[1], part: names[2]}));
+        console.log(bookData);
+        draw();
+    }
 }
 
 function draw() {
+    var similarity = [];
+    var similarity2 = [];
+    var similarity3 = [];
+    var similarity4 = [];
+    var rowLabelNames = [];
+    var currentBook = [];
     var name = bookData.book.author + " " + bookData.book.title + " " + bookData.book.part;
     currentBook.push(name);
     for (var k = 0; k < bookData.arr.length; k++) {
