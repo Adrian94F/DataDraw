@@ -23,47 +23,6 @@ splitTitleFromAuthorForObject = function (object) {
             title: title
         }
 
-        rowlabels.push(rowlabel);
-    }
-
-    var arr;
-    var clusters;
-    var collabels;
-
-    var newData = {};
-    newData.rowlabels = rowlabels;
-
-    if (object.arr) {
-        arr = object.arr;
-        newData.arr = arr;
-    }
-
-    if (object.clusters) {
-        clusers = object.clusters;
-        newData.clusters = clusters;
-    }
-
-    if (object.collabels) {
-        collabels = object.collabels;
-        newData.collabels = collabels;
-    }
-
-    return newData;
-}
-
-splitTitleFromAuthorForObjectWithPart = function (object) {
-    var rowlabels = [];
-
-    for (var i = 0; i < object.rowlabels.length; i++) {
-        var book = object.rowlabels[i].split("_");
-        var author = book[0];
-        var title = book[1];
-
-        var rowlabel = {
-            author: author,
-            title: title
-        }
-
         if (book.length === 3) {
             rowlabel.part = book[2];
         }
@@ -96,25 +55,22 @@ splitTitleFromAuthorForObjectWithPart = function (object) {
     return newData;
 }
 
+
 filterByBook = function (json, book) {
     var data = JSON.parse(json);
+    console.log(book);
     var rowlabels = data.rowlabels;
 
-    var bookIndex = -1;
+    var bookIndex = findBookIndex(rowlabels, book);
 
-    if (book.part) {
-        bookIndex = rowlabels.findIndex((element) => element.author === book.author && element.title === book.title && element.part === element.part);
-    } else {
-        bookIndex = rowlabels.findIndex((element) => element.author === book.author && element.title === book.title);
-    }
     if (bookIndex === -1) {
         return "No results";
     }
 
+    console.log(bookIndex);
     var result = { rowlabels: rowlabels, book: rowlabels[bookIndex] };
-
+    console.log(result)
     if (data.arr) {
-        console.log("in arr");
         result.arr = data.arr[bookIndex];
     }
 
@@ -134,12 +90,8 @@ filterByBookAndScore = function (json, book, score) {
     var data = JSON.parse(json);
     var rowlabels = data.rowlabels;
 
-    var bookIndex;
-    if (book.part) {
-        bookIndex = rowlabels.findIndex((element) => element.author === book.author && element.title === book.title && element.part === element.part);
-    } else {
-        bookIndex = rowlabels.findIndex((element) => element.author === book.author && element.title === book.title);
-    }
+    var bookIndex = findBookIndex(rowlabels, book);
+
 
     if (bookIndex === -1) {
         return "No results";
@@ -149,6 +101,8 @@ filterByBookAndScore = function (json, book, score) {
     if (!data.arr) {
         return "No data to filter";
     }
+
+    book = data.rowlabels[bookIndex];
 
     var arr = data.arr[bookIndex];
 
@@ -167,6 +121,13 @@ filterByBookAndScore = function (json, book, score) {
     return JSON.stringify({ rowlabels: filteredRowlabels, arr: filteredScores });
 }
 
+var findBookIndex = function (rowlabels, book) {
+    if (book.part) {
+        return rowlabels.findIndex((element) => element.author === book.author && element.title === book.title && element.part === book.part);
+    } else {
+        return rowlabels.findIndex((element) => element.author === book.author && element.title === book.title);
+    }
+}
 
 
 
