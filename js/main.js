@@ -45,10 +45,8 @@ $(document).ready(function(){
     function handleDragOver(evt) {
         evt.stopPropagation();
         evt.preventDefault();
-        evt.dataTransfer.dropEffect = 'copy'; // Explicitly show this is a copy.
+        evt.dataTransfer.dropEffect = 'copy';
     }
-
-    // Setup the dnd listeners.
     var dropZone = document.getElementById('drop_zone');
     dropZone.addEventListener('dragover', handleDragOver, false);
     dropZone.addEventListener('drop', handleFileSelect, false);
@@ -60,3 +58,25 @@ $(document).ready(function(){
         d3map();
     });
 });
+
+function updateTextInput(val, m) {
+    if (m===0) {
+        document.getElementById('minValue').value = val;
+        max = document.getElementById('maxValue');
+        maxS = document.getElementById('maxValueSlider');
+        if (maxS.value < val) {
+            maxS.value = val;
+            max.value = val;
+        }
+    }
+    else {
+        document.getElementById('maxValue').value = val;
+        min = document.getElementById('minValue');
+        minS = document.getElementById('minValueSlider');
+        if (minS.value > val) {
+            minS.value = val;
+            min.value = val;
+        }
+    }
+    d3map();
+}
