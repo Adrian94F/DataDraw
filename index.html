@@ -1,11 +1,19 @@
 <!DOCTYPE html>
 <html>
+<body>
+<h3>Choose book's fragment</h3>
+<select id="select" onchange="changeBook()" style="margin-bottom: 20px">
+	<option value="all">All</option>
+</select>
 
 <div id="container" style="min-width: 400px; height: 500px; max-width: 1000px;">
 	<script src="https://code.highcharts.com/highcharts.js"></script>
 	<script src="https://d3js.org/d3.v4.min.js"></script>
 	<script src="https://code.highcharts.com/modules/exporting.js"></script>
 	<script type="text/javascript" src="js/scatterPlot.js"> </script>
+	<script type="text/javascript" src="js/filter.js"> </script>
 
 </div>
+</body>
+
 </html>
