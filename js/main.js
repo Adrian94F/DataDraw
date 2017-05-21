@@ -11,6 +11,7 @@ $(document).ready(function(){
     });
 
     $("#heatmap2link").click(function(event){
+        d3scatterPlot();
     });
 
     $("#cellslink").click(function(event){
