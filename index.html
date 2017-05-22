@@ -62,20 +62,16 @@
 
     <script>
         function displayData() {
-            console.log("in");
             var filterEnabled = document.getElementById("filterCheckbox").checked;
             if (filterEnabled) {
-                console.log("in 2");
-                var data = getData();
+                var data = JSON.parse(getData());
                 var select = document.getElementById("sel1");
                 var book = select.options[select.selectedIndex].text;
                 var details = book.split(" ");
-                document.getElementById("list").innerHTML = filterByBook(data, { author: details[0], title: details[1], part: details[2] });
+                document.getElementById("list").innerHTML = JSON.stringify(filterByAuthor(data, details[0]));
             } else {
-                console.log("in 3");
                 document.getElementById("list").innerHTML = getData();
             }
-
         }
     </script>
 
