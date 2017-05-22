@@ -7,7 +7,8 @@ var rowLabelNames = [];
 function d3scatterPlot(){
     $("#drawingCanvas").html("");
     $("#colorScaleDiv").hide();
-    d3.json("data/1/similarity.json", function (data) {
+    var file = document.getElementById('fileSelector').value;
+    d3.json(file, function (data) {
 
         function bubble(book_1, book_2, sim) {
             this.x = book_1;
@@ -16,7 +17,7 @@ function d3scatterPlot(){
         }
 
         for (var i = 0; i < data.rowlabels.length; i++) {
-            for (var j = 0; j < data.arr[i].length; j++) {
+            for (var j = 0; j < data.rowlabels.length; j++) {
                 if (data.arr[i][j] <= 0.25) {
                     similarity.push(new bubble(i, j, data.arr[i][j]));
                 } else if (data.arr[i][j] > 0.25 && data.arr[i][j] <= 0.5) {
@@ -30,10 +31,10 @@ function d3scatterPlot(){
             rowLabelNames.push(data.rowlabels[i]);
         }
 
-        var obj = {name: "0-25% similarity", data: similarity, color: "green", turboThreshold: 100000};
-        var obj2 = {name: "26-50% similarity", data: similarity2, color: "yellow", turboThreshold: 100000};
-        var obj3 = {name: "51-75% similarity", data: similarity3, color: "orange", turboThreshold: 100000};
-        var obj4 = {name: "76-100% similarity", data: similarity4, color: "red", turboThreshold: 100000};
+        var obj = {name: "0-25%", data: similarity, color: "green", turboThreshold: 100000};
+        var obj2 = {name: "26-50%", data: similarity2, color: "yellow", turboThreshold: 100000};
+        var obj3 = {name: "51-75%", data: similarity3, color: "orange", turboThreshold: 100000};
+        var obj4 = {name: "76-100%", data: similarity4, color: "red", turboThreshold: 100000};
 
         Highcharts.chart('drawingCanvas', {
             chart: {
@@ -43,7 +44,7 @@ function d3scatterPlot(){
                 panKey: 'shift'
             },
             title: {
-                text: "Similarity's visualization"
+                text: "Data visualization"
             },
             subtitle: {
                 text: 'Books'
@@ -79,7 +80,7 @@ function d3scatterPlot(){
                 formatter: function () {
                     return 'Book 1:  ' + rowLabelNames[this.x] + '<br>' +
                         'Book 2: ' + rowLabelNames[this.y] + '<br>' +
-                        'Similarity: ' + data.arr[this.x][this.y];
+                        'Value: ' + data.arr[this.x][this.y];
                 }
             },
             legend: {

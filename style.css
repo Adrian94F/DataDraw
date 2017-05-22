@@ -28,13 +28,6 @@ body {
 
 }
 
-.fullh {
-  padding-bottom: 100%;
-  padding-top: 1%;
-  margin-bottom: -100%;
-  overflow: hidden;
-}
-
 body,
 div {
   margin: 0;

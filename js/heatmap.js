@@ -11,8 +11,8 @@ function d3map() {
     for (i=0; i<n; i++) {
         domain.push((((maxValue - minValue) / n * i)) * 255);
     }
-
-    d3mapDraw("data/1/similarity.json", domain, scales[$('input[type=radio][name=colorRadio]:checked').val()]);
+    var file = document.getElementById('fileSelector').value;
+    d3mapDraw(file, domain, scales[$('input[type=radio][name=colorRadio]:checked').val()]);
 }
 
 function d3mapDraw(filename, mapDomain, mapScale) {
@@ -26,7 +26,8 @@ function d3mapDraw(filename, mapDomain, mapScale) {
         var canvasAspect = canvasDim[Y] / canvasDim[X];
         var heatmapDim = [heatmap.rowlabels.length, heatmap.rowlabels.length];
         var heatmapAspect = heatmapDim[Y] / heatmapDim[X];
-
+        var tickDivisor = Math.pow(10,Math.floor(Math.log10(heatmapDim[X])/2));
+        //alert(tickDivisor.toString());
         if (heatmapAspect < canvasAspect)
             canvasDim[Y] = canvasDim[X] * heatmapAspect;
         else
@@ -83,14 +84,14 @@ function d3mapDraw(filename, mapDomain, mapScale) {
                     return heatmap.rowlabels[d];
                 })
                 .orient("top")
-                .ticks(heatmapDim[X] / 10),
+                .ticks(heatmapDim[X] / tickDivisor),
             d3.svg.axis()
                 .scale(scale[Y])
                 .tickFormat(function(d) {
                     return heatmap.rowlabels[d];
                 })
                 .orient("right")
-                .ticks(heatmapDim[Y] / 10)
+                .ticks(heatmapDim[Y] / tickDivisor)
         ];
 
         var axisElement = [
@@ -103,8 +104,8 @@ function d3mapDraw(filename, mapDomain, mapScale) {
         ];
 
         function drawAxes() {
-            axisElement[X].call(axis[X]).selectAll("text").attr("transform", "rotate(90)").style("text-anchor", "end").attr("dy", ".15em");
-            axisElement[Y].call(axis[Y]);
+            axisElement[X].call(axis[X]).selectAll("text").attr("transform", "rotate(-90)").style("text-anchor", "start").attr("dx", "1em").attr("dy", "3em");
+            axisElement[Y].call(axis[Y]).selectAll("text").attr("transform", "rotate(0)").style("text-anchor", "start").attr("dx", "1em").attr("dy", "-3em");
         }
 
         var context = canvas.node().getContext("2d");

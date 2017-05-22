@@ -7,31 +7,41 @@ z = [ [ 0, 0, 0, 0, 0.215542, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 function daveChart() {
     $("#drawingCanvas").html("");
     $("#colorScaleDiv").hide();
-    var data = {x: x, y: y, z: z, type: 'surface',
-        contours:{
-            cauto: false,
-            cmin: 0.25,
-            cmax: 0.35
-        }
-    };
-    var width = $("#drawingCanvas").width;
-    var height = window.innerHeight - 100;
-    var layout = {
-        scene:{zaxis:{
+    var file = document.getElementById('fileSelector').value;
 
-            // range: [0.25, 0.35],
-        },},
-        width: width,
-        height: height,
-        margin: {
-            l: 50,
-            r: 50,
-            b: 100,
-            t: 100,
-            pad: 4
-        },
+    $.getJSON(file, function(json) {
+        console.log(json); // this will show the info it in firebug console
 
-    };
+        x = json.rowlabels;
+        y = x;
+        z = json.arr;
+        var data = {x: x, y: y, z: z, type: 'surface',
+            contours:{
+                cauto: false,
+                cmin: 0.25,
+                cmax: 0.35
+            }
+        };
+        var width = $("#drawingCanvas").width;
+        var height = window.innerHeight - 100;
+        var layout = {
+            scene:{zaxis:{
 
-    Plotly.newPlot('drawingCanvas', [data], layout);
+                // range: [0.25, 0.35],
+            },},
+            width: width,
+            height: height,
+            margin: {
+                l: 50,
+                r: 50,
+                b: 100,
+                t: 100,
+                pad: 4
+            },
+
+        };
+
+        Plotly.newPlot('drawingCanvas', [data], layout);
+    });
+
 }
