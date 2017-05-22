@@ -17,7 +17,7 @@ function d3scatterPlot(){
 
         for (var i = 0; i < data.rowlabels.length; i++) {
             for (var j = 0; j < data.arr[i].length; j++) {
-                if (data.arr[i][j] > 0 && data.arr[i][j] <= 0.25) {
+                if (data.arr[i][j] <= 0.25) {
                     similarity.push(new bubble(i, j, data.arr[i][j]));
                 } else if (data.arr[i][j] > 0.25 && data.arr[i][j] <= 0.5) {
                     similarity2.push(new bubble(i, j, data.arr[i][j]));
