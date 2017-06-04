@@ -1,52 +1,46 @@
 <!DOCTYPE html>
+
 <html>
 <head>
-<meta charset="utf-8">
+	<link rel="stylesheet" href="css/bootstrap.min.css" />
+	<link rel="stylesheet" href="css/font-awesome.css" />
+	<link rel="stylesheet" href="css/jquery-ui.css">
+	<link rel="shortcut icon" type="image/png" href="img/favicon.png"/>
+	<link rel="stylesheet" href="css/style.css" type="text/css" />
+	<title>Data Draw</title>
+	<meta charset="utf-8">
+
+	<!-- main -->
+
+	<script src="js/jquery.min.js"></script>
+	<script src="js/jquery-ui.js"></script>
+	<script src="js/main.js"></script>
+
+	<!-- heatmap -->
+	<script src="js/d3.v3.js"></script>
+	<script src="js/heatmap.js"></script>
+
+	<!-- chart -->
+	<script src="js/plotly-latest.min.js"></script>
+	<script src="js/chart.js"></script>
+
+	<!-- scatterplot -->
+	<script src="js/scatterPlot.js"> </script>
+	<script src="js/highcharts.js"></script>
+	<script src="js/exporting.js"></script>
+	
 </head>
-<body>
-</body>
-</html>
-
-<!DOCTYPE html>
-
-<html>
-	<head>
-		<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" />
-		<link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.css" />
-		<link rel="shortcut icon" type="image/png" href="img/favicon.png"/>
-		<link rel="stylesheet" href="css/style.css" type="text/css" />
-		<title>Data Draw</title>
-		<meta charset="utf-8">
-
-		<!-- main -->
-		<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-		<script src="js/main.js"></script>
-
-		<!-- heatmap -->
-		<script src="js/d3.v3.js"></script>
-		<script src="js/heatmap.js"></script>
-
-		<!-- chart -->
-		<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
-		<script src="js/chart.js"></script>
-
-		<!-- scatterplot -->
-		<script src="js/scatterPlot.js"> </script>
-		<script src="https://code.highcharts.com/highcharts.js"></script>
-		<script src="https://code.highcharts.com/modules/exporting.js"></script>
-
-	</head>
-    <body id="drop_zone">
-		<header>
-			<nav class="navbar navbar-default">
+<body id="drop_zone">
+	<header>
+		<nav class="navbar navbar-default">
 			<div class="container">
 				<div class="navbar-header">
 					<a class="navbar-brand" href="index.html">
-                        <img src="img/favicon.png" style="width:20px;">
-                    </a>
-                    <a class="navbar-brand" href="index.html">
-                        Data Draw
-                    </a>
+						<img src="img/favicon.png" style="width:20px;">
+					</a>
+					<a class="navbar-brand" href="index.html">
+						Data Draw
+					</a>
 				</div>
 				<ul class="nav navbar-nav navbar-right">
 					<li><a href="#" id="heatmaplink"><i class="fa fa-bar-chart"></i> Draw 1st heat map</a></li>
@@ -54,49 +48,61 @@
 					<li><a href="#" id="chartlink"><i class="fa fa-bar-chart"></i> Draw 3D chart</a></li>
 				</ul>
 			</div>
-			</nav>
-		</header>
-		
-		<div id="main" >
-            <div class="col-md-2">
-                <h3>Select file:</h3>
-				<select id="fileSelector">
-					<option value="data/1/distance.json">distance 1</option>
-					<option value="data/1/similarity.json" selected>similarity 1</option>
-					<option value="data/1/transform.json">transform 1</option>
-					<option value="data/1/weighted.json">weighted 1</option>
-					<option value="data/2/distance.json">distance 2</option>
-					<option value="data/2/similarity.json">similarity 2</option>
-					<option value="data/2/transform.json" >transform 2</option>
-					<option value="data/2/weighted.json">weighted 2</option>
-				</select>
-				<div id="colorScaleDiv" style="display:none;">
-					<h3>Colors:</h3>
-					<div class="radio">
-						<label><input type="radio" name="colorRadio" value="0" checked>Green to red</label>
-					</div>
-					<div class="radio">
-						<label><input type="radio" name="colorRadio" value="1">Red to green</label>
-					</div>
+		</nav>
+	</header>
+	
+	<div id="main" >
+		<div class="col-md-2">
+			<h3>Select file:</h3>
+			<select id="fileSelector">
+				<option value="data/1/distance.json">distance 1</option>
+				<option value="data/1/similarity.json" selected>similarity 1</option>
+				<option value="data/1/transform.json">transform 1</option>
+				<option value="data/1/weighted.json">weighted 1</option>
+				<option value="data/2/distance.json">distance 2</option>
+				<option value="data/2/similarity.json">similarity 2</option>
+				<option value="data/2/transform.json" >transform 2</option>
+				<option value="data/2/weighted.json">weighted 2</option>
+			</select>
 
-					<h3>Scale:</h3>
-					<div>
-						<input type="range" id="minValueSlider" min="0" max="1" step="0.0001" value="0" onchange="updateTextInput(this.value, 0);">
-						<input type="text" id="minValue" value="0" size="2">
-					</div>
-					<div>
-						<input type="range" id="maxValueSlider" min="0" max="1" step="0.0001" value="1" onchange="updateTextInput(this.value, 1);">
-						<input type="text" id="maxValue" value="1" size="2">
-					</div>
+			<div id="colorScaleDiv" style="display:none;">
+				<h3>Colors:</h3>
+				<div class="radio">
+					<label><input type="radio" name="colorRadio" value="0" checked>Green to red</label>
 				</div>
-            </div>
+				<div class="radio">
+					<label><input type="radio" name="colorRadio" value="1">Red to green</label>
+				</div>
 
-            <div class="col-md-10">
-				<div id="drawingCanvas"></div>
+				<h3>Scale:</h3>
+				<div>
+					<input type="range" id="minValueSlider" min="0" max="1" step="0.0001" value="0" onchange="updateTextInput(this.value, 0);">
+					<input type="text" id="minValue" value="0" size="2">
+				</div>
+				<div>
+					<input type="range" id="maxValueSlider" min="0" max="1" step="0.0001" value="1" onchange="updateTextInput(this.value, 1);">
+					<input type="text" id="maxValue" value="1" size="2">
+				</div>
 			</div>
-
-
+			<div id="daveScale" style="display:none">
+				<h3>Scale:</h3>
+				<div>
+					<input type="range" id="minValSlider" min="0" max="1" step="0.0001" value="0" onchange="updateTextInput(this.value, 0);">
+					<input type="text" id="minValue" value="0" size="2">
+				</div>
+				<div>
+					<input type="range" id="maxValueSlider" min="0" max="1" step="0.0001" value="1" onchange="updateTextInput(this.value, 1);">
+					<input type="text" id="maxValue" value="1" size="2">
+				</div>
+			</div>
 		</div>
 
-	</body>
+		<div class="col-md-10">
+			<div id="drawingCanvas"></div>
+		</div>
+
+
+	</div>
+
+</body>
 </html>

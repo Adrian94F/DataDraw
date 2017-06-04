@@ -1,25 +1,26 @@
 /**
  * Created by adika on 11.05.2017.
  */
+
 $(document).ready(function(){
     var jsonFile = "";
 
     $("#drawingCanvas").height = window.innerHeight;
 
-    $("#heatmaplink").click(function(event){
-        d3map();
-    });
+    // $("#heatmaplink").click(function(event){
+    //     d3map();
+    // });
 
-    $("#heatmap2link").click(function(event){
-        d3scatterPlot();
-    });
+    // $("#heatmap2link").click(function(event){
+    //     d3scatterPlot();
+    // });
 
-    $("#cellslink").click(function(event){
-    });
+    // $("#cellslink").click(function(event){
+    // });
 
-    $("#chartlink").click(function(event){
-        daveChart();
-    });
+    // $("#chartlink").click(function(event){
+    //     daveChart();
+    // });
 
     if (window.File && window.FileReader && window.FileList && window.Blob) {
         // Great success! All the File APIs are supported.

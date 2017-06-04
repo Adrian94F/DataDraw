@@ -5,8 +5,8 @@ var similarity4 = [];
 var rowLabelNames = [];
 
 function d3scatterPlot(){
-    $("#drawingCanvas").html("");
-    $("#colorScaleDiv").hide();
+    // $("#drawingCanvas").html("");
+    // $("#colorScaleDiv").hide();
     var file = document.getElementById('fileSelector').value;
     d3.json(file, function (data) {
 
