@@ -65,10 +65,7 @@
             var filterEnabled = document.getElementById("filterCheckbox").checked;
             if (filterEnabled) {
                 var data = JSON.parse(getData());
-                var select = document.getElementById("sel1");
-                var book = select.options[select.selectedIndex].text;
-                var details = book.split(" ");
-                document.getElementById("list").innerHTML = JSON.stringify(filterByAuthor(data, details[0]));
+                document.getElementById("list").innerHTML = JSON.stringify(filterByMultipleBooks(data, ["dziurdziowie", "zamiec"]));
             } else {
                 document.getElementById("list").innerHTML = getData();
             }
