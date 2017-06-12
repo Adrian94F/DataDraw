@@ -4,7 +4,7 @@ var similarity3 = [];
 var similarity4 = [];
 var rowLabelNames = [];
 
-function d3scatterPlot(){
+function d3scatterPlot(drawMeHere){
     // $("#drawingCanvas").html("");
     // $("#colorScaleDiv").hide();
     var file = document.getElementById('fileSelector').value;
@@ -36,7 +36,7 @@ function d3scatterPlot(){
         var obj3 = {name: "51-75%", data: similarity3, color: "orange", turboThreshold: 100000};
         var obj4 = {name: "76-100%", data: similarity4, color: "red", turboThreshold: 100000};
 
-        Highcharts.chart('drawingCanvas', {
+        Highcharts.chart(drawMeHere, {
             chart: {
                 type: 'scatter',
                 zoomType: 'xy',

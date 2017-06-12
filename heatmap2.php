@@ -30,7 +30,7 @@
 	<script src="js/exporting.js"></script>
 	
 </head>
-<body id="drop_zone" onload="d3scatterPlot();">
+<body id="drop_zone" onload='d3scatterPlot("#drawingCanvas");'>
 	<header>
 		<?php include("header.php") ?>
 	</header>

@@ -1,6 +1,6 @@
 function d3map() {
     // $("#colorScaleDiv").show();
-    // $("#drawingCanvas").html("");
+    $("#drawingCanvas").html("");
     var domain = [];
     var scales = [["#fff", "#ff1100", "#ff2200", "#ff3300", "#ff4400", "#ff5500", "#ff6600", "#ff7700", "#ff8800", "#ff9900", "#ffaa00", "#ffbb00", "#ffcc00", "#ffdd00", "#ffee00", "#ffff00", "#eeff00", "#ddff00", "#ccff00", "#bbff00", "#aaff00", "#99ff00", "#88ff00", "#77ff00", "#66ff00", "#55ff00", "#44ff00", "#33ff00", "#22ff00", "#11ff00", "#fff"],
         ["#fff", "#11ff00", "#22ff00", "#33ff00", "#44ff00", "#55ff00", "#66ff00", "#77ff00", "#88ff00", "#99ff00", "#aaff00", "#bbff00", "#ccff00", "#ddff00", "#eeff00", "#ffff00", "#ffee00", "#ffdd00", "#ffcc00", "#ffbb00", "#ffaa00", "#ff9900", "#ff8800", "#ff7700", "#ff6600", "#ff5500", "#ff4400", "#ff3300", "#ff2200", "#ff1100", "#fff"]];
