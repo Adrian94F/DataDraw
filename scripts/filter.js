@@ -130,7 +130,7 @@ filterByAuthor = function (data, author) {
     for (var i = 0; i < indexes.length; i++) {
         var similarity = [];
         for (var j = 0; j < indexes.length; j++) {
-            similarity.push(data.arr[indexes[i]][j]);
+            similarity.push(data.arr[indexes[i]][indexes[j]]);
         }
         similarities.push(similarity);
     }
@@ -156,7 +156,7 @@ filterByMultipleAuthors = function (data, authors) {
     for (let i = 0; i < indexes.length; i++) {
         let similarity = [];
         for (let j = 0; j < indexes.length; j++) {
-            similarity.push(data.arr[indexes[i]][j]);
+            similarity.push(data.arr[indexes[i]][indexes[j]]);
         }
         similarities.push(similarity);
     }
@@ -167,6 +167,8 @@ filterByMultipleAuthors = function (data, authors) {
 filterByMultipleBooks = function (data, bookTitles) {
     let newRowlabels = [];
     let similarities = [];
+
+    console.log(bookTitles);
 
     let indexes = [];
     for (let i = 0; i < data.rowlabels.length; i++) {
@@ -181,7 +183,7 @@ filterByMultipleBooks = function (data, bookTitles) {
     for (let i = 0; i < indexes.length; i++) {
         let similarity = [];
         for (let j = 0; j < indexes.length; j++) {
-            similarity.push(data.arr[indexes[i]][j]);
+            similarity.push(data.arr[indexes[i]][indexes[j]]);
         }
         similarities.push(similarity);
     }
