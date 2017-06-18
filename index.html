@@ -11,98 +11,116 @@
 	<meta charset="utf-8">
 
 	<!-- main -->
-
 	<script src="js/jquery.min.js"></script>
 	<script src="js/jquery-ui.js"></script>
 	<script src="js/main.js"></script>
 
+	<!-- filters -->
+	<script src="js/filter.js"></script>
+
 	<!-- heatmap -->
 	<script src="js/d3.v3.js"></script>
-	<script src="js/heatmap.js"></script>
+	<script src="js/heat_map.js"></script>
 
 	<!-- chart -->
 	<script src="js/plotly-latest.min.js"></script>
-	<script src="js/chart.js"></script>
+	<script src="js/plot_3d.js"></script>
 
 	<!-- scatterplot -->
-	<script src="js/scatterPlot.js"> </script>
+	<script src="js/scatter_plot.js"> </script>
 	<script src="js/highcharts.js"></script>
 	<script src="js/exporting.js"></script>
-
 </head>
-<body id="drop_zone">
-	<header>
-		<nav class="navbar navbar-default">
-			<div class="container">
-				<div class="navbar-header">
-					<a class="navbar-brand" href="index.html">
-						<img src="img/favicon.png" style="width:20px;">
-					</a>
-					<a class="navbar-brand" href="index.html">
-						Data Draw
-					</a>
-				</div>
-				<ul class="nav navbar-nav navbar-right">
-					<li><a href="#" id="heatmaplink"><i class="fa fa-bar-chart"></i> Draw 1st heat map</a></li>
-					<li><a href="#" id="heatmap2link"><i class="fa fa-bar-chart"></i> Draw 2nd heat map</a></li>
-					<li><a href="#" id="chartlink"><i class="fa fa-bar-chart"></i> Draw 3D chart</a></li>
-				</ul>
+<body onload="datadraw_init()">
+	<nav class="navbar navbar-default">
+		<div class="container">
+			<div class="navbar-header">
+				<a class="navbar-brand" href="index.html">
+					<img src="img/favicon.png" style="width:20px;">
+				</a>
+				<a class="navbar-brand" href="index.html">
+					Data Draw
+				</a>
 			</div>
-		</nav>
-	</header>
-
+			<ul class="nav navbar-nav navbar-right">
+				<li><a href="#" onclick="datadraw_changeChart('datadraw_heat_map')"><i class="fa fa-bar-chart"></i> Draw heat map</a></li>
+				<li><a href="#" onclick="datadraw_changeChart('datadraw_scatter_plot')"><i class="fa fa-bar-chart"></i> Draw scatter plot</a></li>
+				<li><a href="#" onclick="datadraw_changeChart('datadraw_plot_3d')"><i class="fa fa-bar-chart"></i> Draw 3D chart</a></li>
+			</ul>
+		</div>
+	</nav>
+	
 	<div id="main" >
 		<div class="col-md-2">
-			<h3>Select file:</h3>
-			<select id="fileSelector">
-				<option value="data/1/distance.json">distance 1</option>
-				<option value="data/1/similarity.json" selected>similarity 1</option>
-				<option value="data/1/transform.json">transform 1</option>
-				<option value="data/1/weighted.json">weighted 1</option>
-				<option value="data/2/distance.json">distance 2</option>
-				<option value="data/2/similarity.json">similarity 2</option>
-				<option value="data/2/transform.json" >transform 2</option>
-				<option value="data/2/weighted.json">weighted 2</option>
-			</select>
+			<div id="datadraw_common">
+				<h3>Select file:</h3>
+				<select id="datadraw_fileSelector" onchange="datadraw_handleFileChange(this);">
+					<option value="data/1/distance.json">distance 1</option>
+					<option value="data/1/similarity.json">similarity 1</option>
+					<option value="data/1/transform.json">transform 1</option>
+					<option value="data/1/weighted.json">weighted 1</option>
+					<option value="data/2/distance.json">distance 2</option>
+					<option value="data/2/similarity.json" selected>similarity 2</option>
+					<option value="data/2/transform.json" >transform 2</option>
+					<option value="data/2/weighted.json">weighted 2</option>
+				</select>
 
-			<div id="colorScaleDiv" style="display:none;">
-				<h3>Colors:</h3>
-				<div class="radio">
-					<label><input type="radio" name="colorRadio" value="0" checked>Green to red</label>
+				<div id="datadraw_similarity">
+					<h3>Similarity range:</h3>
+					<input type="text" id="datadraw_amount" readonly style="background:none;border:0; color:#f6931f; font-weight:bold;">
 				</div>
-				<div class="radio">
-					<label><input type="radio" name="colorRadio" value="1">Red to green</label>
-				</div>
+				<div id="datadraw_slider-range"></div>
+			</div>
 
-				<h3>Scale:</h3>
-				<div>
-					<input type="range" id="minValueSlider" min="0" max="1" step="0.0001" value="0" onchange="updateTextInput(this.value, 0);">
-					<input type="text" id="minValue" value="0" size="2">
-				</div>
-				<div>
-					<input type="range" id="maxValueSlider" min="0" max="1" step="0.0001" value="1" onchange="updateTextInput(this.value, 1);">
-					<input type="text" id="maxValue" value="1" size="2">
+			<div id="datadraw_plot3d">
+				<br />
+				<label for="datadraw_cb1"><input id="datadraw_cb1" type="checkbox" onclick="datadraw_handleClick(this);">Hide objects which are not in scale</label><br />
+				<label for="datadraw_cb2"><input id="datadraw_cb2" type="checkbox" onclick="datadraw_handleClick(this);">Hide similarity of the same objects</label><br />
+				<label for="datadraw_cb3"><input id="datadraw_cb3" type="checkbox" onclick="datadraw_handleClick(this);">Reverse scale</label><br />
+				<label for="datadraw_cb4"><input id="datadraw_cb4" type="checkbox" onclick="datadraw_handleClick(this);">Hide duplicates</label><br />
+
+				<label for="datadraw_colorSelector">Color pattern: </label>
+				<select id="datadraw_colorSelector" onchange="datadraw_handleClick(this);"> 
+					<option value="custom" selected>Original</option>
+					<option value="Blackbody">Blackbody</option>
+					<option value="Electric">Electric</option>
+					<option value="Earth">Earth</option>
+					<option value="Bluered">Bluered</option>
+					<option value="YIGnBu">YIGnBu</option>
+					<option value="Portland" >Portland</option>
+					<option value="Picnic">Picnic</option>
+				</select>
+			</div>
+
+			<div id="datadraw_heatmap">
+				<div id="datadraw_colorScaleDiv">
+					<h3>Colors:</h3>
+					<div class="radio">
+						<label><input type="radio" name="colorRadio" value="0" checked onchange="datadraw_handleClick(this)">Green to red</label>
+					</div>
+					<div class="radio">
+						<label><input type="radio" name="colorRadio" value="1" onchange="datadraw_handleClick(this)">Red to green</label>
+					</div>
 				</div>
 			</div>
-			<div id="daveScale" style="display:none">
-				<h3>Scale:</h3>
-				<div>
-					<input type="range" id="minValSlider" min="0" max="1" step="0.0001" value="0" onchange="updateTextInput(this.value, 0);">
-					<input type="text" id="minValue" value="0" size="2">
-				</div>
-				<div>
-					<input type="range" id="maxValueSlider" min="0" max="1" step="0.0001" value="1" onchange="updateTextInput(this.value, 1);">
-					<input type="text" id="maxValue" value="1" size="2">
-				</div>
+			<div id="datadraw_filterbooks">
+				<h3>Choose books</h3>
+				<select id="datadraw_filterbooks_select" style="margin-bottom: 20px">
+					<option value="all"></option>
+				</select>
+				<select id="datadraw_filterbooks_select_2" style="margin-bottom: 20px">
+					<option value="all"></option>
+				</select>
+				<button id="datadraw_filterbooks_button" onclick="datadraw_changeBook('datadraw_drawingCanvas', 'datadraw_fileSelector')">
+					Filter
+				</button>
 			</div>
 		</div>
+
 
 		<div class="col-md-10">
-			<div id="drawingCanvas"></div>
+			<div id="datadraw_drawingCanvas"></div>
 		</div>
-
-
 	</div>
-
 </body>
 </html>

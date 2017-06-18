@@ -1,64 +1,85 @@
 /**
  * Created by adika on 11.05.2017.
+ * Completely changed by Dave - 18.06.2017.
  */
 
-$(document).ready(function(){
-    var jsonFile = "";
+ function datadraw_init()
+ {
+    datadraw_initUI();
+    datadraw_changeChart('datadraw_heat_map');
+}
 
-    $("#drawingCanvas").height = window.innerHeight;
-
-    // $("#heatmaplink").click(function(event){
-    //     d3map();
-    // });
-
-    // $("#heatmap2link").click(function(event){
-    //     d3scatterPlot();
-    // });
-
-    // $("#cellslink").click(function(event){
-    // });
-
-    // $("#chartlink").click(function(event){
-    //     daveChart();
-    // });
-
-    if (window.File && window.FileReader && window.FileList && window.Blob) {
-        // Great success! All the File APIs are supported.
-    } else {
-        alert('The File APIs are not fully supported in this browser.');
-    }
-
-    function handleFileSelect(evt) {
-        evt.stopPropagation();
-        evt.preventDefault();
-        var files = evt.dataTransfer.files;
-        var output = [];
-        var f = files[0];
-        output.push('<li><strong>', escape(f.name), '</strong> (',
-            f.size,
-            ' bytes)',
-            '</li>');
-        document.getElementById('drop').innerText = "";
-        document.getElementById('list').innerHTML = '<ul>' + output.join('') + '</ul>';
-        jsonFile = JSON.parse(JSON.stringify(f));
-    }
-
-    function handleDragOver(evt) {
-        evt.stopPropagation();
-        evt.preventDefault();
-        evt.dataTransfer.dropEffect = 'copy';
-    }
-    var dropZone = document.getElementById('drop_zone');
-    dropZone.addEventListener('dragover', handleDragOver, false);
-    dropZone.addEventListener('drop', handleFileSelect, false);
-
-    $('input[type=radio][name=colorRadio]').change(function() {
-        d3map();
+function datadraw_initUI() {
+    $( "#datadraw_slider-range" ).slider({
+        range: true,
+        min: 0,
+        max: 100,
+        values: [ 0, 100 ],
+        change: function( event, ui ) {datadraw_drawChart();},
+        slide: function( event, ui ) {$( "#datadraw_amount" ).val( "%" + ui.values[ 0 ] + " - %" + ui.values[ 1 ] );}
     });
-    $('input[type=radio][name=scaleRadio]').change(function() {
-        d3map();
-    });
-});
+    $( "#datadraw_amount" ).val( "%" + $( "#datadraw_slider-range" ).slider( "values", 0 ) +
+        " - %" + $( "#datadraw_slider-range" ).slider( "values", 1 ) );
+    fillBooks();
+}
+
+function datadraw_drawChart(){
+    window[datadraw_getChart()]( true,
+        'datadraw_drawingCanvas',
+        'datadraw_slider-range',
+        'datadraw_fileSelector',
+        'datadraw_colorSelector',
+        'datadraw_cb1',
+        'datadraw_cb2',
+        'datadraw_cb3',
+        'datadraw_cb4');
+}
+
+function datadraw_changeChart(chartName){
+    datadraw_setChart(chartName);
+    $("#datadraw_drawingCanvas").html("");
+    // są brzydkie ify bo o case'y się pluły przeglądarki :(
+    if(chartName=="datadraw_heat_map"){
+        $("#datadraw_similarity").show();
+        $("#datadraw_slider-range").show();
+        $("#datadraw_plot3d").hide();
+        $("#datadraw_heatmap").show();
+    }
+    if(chartName=="datadraw_scatter_plot"){
+        $("#datadraw_similarity").hide();
+        $("#datadraw_slider-range").hide();
+        $("#datadraw_plot3d").hide();
+        $("#datadraw_heatmap").hide();
+    }
+
+    if(chartName=="datadraw_plot_3d"){
+        $("#datadraw_similarity").show();
+        $("#datadraw_slider-range").show();
+        $("#datadraw_heatmap").hide();
+        $("#datadraw_plot3d").show();
+    }
+    datadraw_drawChart();
+}
+
+function datadraw_handleFileChange()
+{
+    fillBooks();
+    datadraw_drawChart();
+}
+
+function datadraw_handleClick(cb) {
+    datadraw_drawChart();
+}
+
+function datadraw_setChart(chart)
+{
+    window.datadraw_currentChart = chart;
+}
+
+function datadraw_getChart()
+{
+    return window.datadraw_currentChart;
+}
 
 function updateTextInput(val, m) {
     if (m===0) {
@@ -80,4 +101,26 @@ function updateTextInput(val, m) {
         }
     }
     d3map();
+}
+
+function fillBooks(){
+    var list = [];
+    var file = document.getElementById('datadraw_fileSelector').value;
+    $.getJSON(file, function(json) {
+        var select = document.getElementById("datadraw_filterbooks_select");
+        var select_2 = document.getElementById("datadraw_filterbooks_select_2");
+
+        for (var i = 0; i < json.rowlabels.length; i++){
+            var author = json.rowlabels[i].split("_");
+            var a = author[0] + " " + author[1];
+            if ($.inArray(a, list) == -1) {
+                list.push(a);
+            }
+        }
+
+        for (var k = 0; k < list.length; k++) {
+            select.options[k] = new Option(list[k], list[k]);
+            select_2.options[k] = new Option(list[k], list[k]);
+        }
+    });
 }
