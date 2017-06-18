@@ -1,6 +1,6 @@
-function d3map() {
+function d3map(drawmeHere) {
     // $("#colorScaleDiv").show();
-    $("#drawingCanvas").html("");
+    $("#"+drawmeHere).html("");
     var domain = [];
     var scales = [["#fff", "#ff1100", "#ff2200", "#ff3300", "#ff4400", "#ff5500", "#ff6600", "#ff7700", "#ff8800", "#ff9900", "#ffaa00", "#ffbb00", "#ffcc00", "#ffdd00", "#ffee00", "#ffff00", "#eeff00", "#ddff00", "#ccff00", "#bbff00", "#aaff00", "#99ff00", "#88ff00", "#77ff00", "#66ff00", "#55ff00", "#44ff00", "#33ff00", "#22ff00", "#11ff00", "#fff"],
         ["#fff", "#11ff00", "#22ff00", "#33ff00", "#44ff00", "#55ff00", "#66ff00", "#77ff00", "#88ff00", "#99ff00", "#aaff00", "#bbff00", "#ccff00", "#ddff00", "#eeff00", "#ffff00", "#ffee00", "#ffdd00", "#ffcc00", "#ffbb00", "#ffaa00", "#ff9900", "#ff8800", "#ff7700", "#ff6600", "#ff5500", "#ff4400", "#ff3300", "#ff2200", "#ff1100", "#fff"]];
@@ -12,17 +12,17 @@ function d3map() {
         domain.push((((maxValue - minValue) / n * i)) * 255);
     }
     var file = document.getElementById('fileSelector').value;
-    d3mapDraw(file, domain, scales[$('input[type=radio][name=colorRadio]:checked').val()]);
+    d3mapDraw(drawmeHere, file, domain, scales[$('input[type=radio][name=colorRadio]:checked').val()]);
 }
 
-function d3mapDraw(filename, mapDomain, mapScale) {
+function d3mapDraw(drawMeHere, filename, mapDomain, mapScale) {
     d3.json(filename, function (error, heatmap) {
         if (error) {
             alert("Unable to load file: " + error);
             return;
         }
         var X = 0, Y = 1;
-        var canvasDim = [$("#drawingCanvas").width, window.innerHeight - 100];
+        var canvasDim = [$("#" + drawMeHere).width, window.innerHeight - 100];
         var canvasAspect = canvasDim[Y] / canvasDim[X];
         var heatmapDim = [heatmap.rowlabels.length, heatmap.rowlabels.length];
         var heatmapAspect = heatmapDim[Y] / heatmapDim[X];
@@ -46,7 +46,7 @@ function d3mapDraw(filename, mapDomain, mapScale) {
                 .range([canvasDim[Y], 0])
         ];
 
-        var body = d3.select("#drawingCanvas");
+        var body = d3.select("#" + drawMeHere);
 
         var canvas = body.append("canvas")
             .attr("width", heatmapDim[X])

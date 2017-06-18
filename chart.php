@@ -35,7 +35,7 @@
 				min: 0,
 				max: 100,
 				values: [ 0, 100 ],
-				change: function( event, ui ) {daveChart();},
+				change: function( event, ui ) {daveChart('drawingCanvas');},
 				slide: function( event, ui ) {
 					$( "#amount" ).val( "%" + ui.values[ 0 ] + " - %" + ui.values[ 1 ] );
 

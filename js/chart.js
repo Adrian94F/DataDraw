@@ -1,5 +1,5 @@
 // Plotting the surfaces..
-function daveChart() {
+function daveChart(drawMeHere) {
     var file = document.getElementById('fileSelector').value;
     var min = $("#slider-range").slider("values", 0) / 100;
     var max = $("#slider-range").slider("values", 1) / 100;
@@ -93,7 +93,7 @@ function daveChart() {
             autocolorscale: false,
             reversescale: scalereversed,
         };
-        var width = $("#drawingCanvas").width;
+        var width = $("#" + drawMeHere).width;
         var height = window.innerHeight - 100;
         var layout = {
             scene: {
@@ -112,8 +112,8 @@ function daveChart() {
             },
 
         };
-
-        Plotly.newPlot('drawingCanvas', [data], layout);
+        var canvas = document.getElementById('drawingCanvas');
+        Plotly.newPlot(canvas, [data], layout);
     });
 
 }
