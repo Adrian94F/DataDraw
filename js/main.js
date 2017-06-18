@@ -1,83 +1,44 @@
 /**
  * Created by adika on 11.05.2017.
+ * Completely changed by Dave - 18.06.2017.
  */
 
-$(document).ready(function(){
-    var jsonFile = "";
+function init()
+{
+    window.datadraw_colorSelector = 'datadraw_colorSelector';
+    window.datadraw_placeholder = 'datadraw_drawingCanvas';
+    setChart('daveChart');
+    initUI();
+    drawChart();
+}
 
-    $("#drawingCanvas").height = window.innerHeight;
-
-    // $("#heatmaplink").click(function(event){
-    //     d3map();
-    // });
-
-    // $("#heatmap2link").click(function(event){
-    //     d3scatterPlot();
-    // });
-
-    // $("#cellslink").click(function(event){
-    // });
-
-    // $("#chartlink").click(function(event){
-    //     daveChart();
-    // });
-
-    if (window.File && window.FileReader && window.FileList && window.Blob) {
-        // Great success! All the File APIs are supported.
-    } else {
-        alert('The File APIs are not fully supported in this browser.');
-    }
-
-    function handleFileSelect(evt) {
-        evt.stopPropagation();
-        evt.preventDefault();
-        var files = evt.dataTransfer.files;
-        var output = [];
-        var f = files[0];
-        output.push('<li><strong>', escape(f.name), '</strong> (',
-            f.size,
-            ' bytes)',
-            '</li>');
-        document.getElementById('drop').innerText = "";
-        document.getElementById('list').innerHTML = '<ul>' + output.join('') + '</ul>';
-        jsonFile = JSON.parse(JSON.stringify(f));
-    }
-
-    function handleDragOver(evt) {
-        evt.stopPropagation();
-        evt.preventDefault();
-        evt.dataTransfer.dropEffect = 'copy';
-    }
-    var dropZone = document.getElementById('drop_zone');
-    dropZone.addEventListener('dragover', handleDragOver, false);
-    dropZone.addEventListener('drop', handleFileSelect, false);
-
-    $('input[type=radio][name=colorRadio]').change(function() {
-        d3map();
+function initUI() {
+    $( "#datadraw_slider-range" ).slider({
+        range: true,
+        min: 0,
+        max: 100,
+        values: [ 0, 100 ],
+        change: function( event, ui ) {window[getChart()](window.datadraw_placeholder, window.datadraw_colorSelector);},
+        slide: function( event, ui ) {$( "#datadraw_amount" ).val( "%" + ui.values[ 0 ] + " - %" + ui.values[ 1 ] );}
     });
-    $('input[type=radio][name=scaleRadio]').change(function() {
-        d3map();
-    });
-});
+    $( "#datadraw_amount" ).val( "%" + $( "#datadraw_slider-range" ).slider( "values", 0 ) +
+        " - %" + $( "#datadraw_slider-range" ).slider( "values", 1 ) );
+}
 
-function updateTextInput(val, m) {
-    if (m===0) {
-        document.getElementById('minValue').value = val;
-        max = document.getElementById('maxValue');
-        maxS = document.getElementById('maxValueSlider');
-        if (maxS.value < val) {
-            maxS.value = val;
-            max.value = val;
-        }
-    }
-    else {
-        document.getElementById('maxValue').value = val;
-        min = document.getElementById('minValue');
-        minS = document.getElementById('minValueSlider');
-        if (minS.value > val) {
-            minS.value = val;
-            min.value = val;
-        }
-    }
-    d3map();
+function drawChart(){
+    window[getChart()](window.datadraw_placeholder, window.datadraw_colorSelector);
+}
+
+function handleClick(cb) {
+    window[getChart()](window.datadraw_placeholder, window.datadraw_colorSelector);
+}
+
+function setChart(chart)
+{
+    window.currentChart = chart;
+}
+
+function getChart()
+{
+    return window.currentChart;
 }

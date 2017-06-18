@@ -1,15 +1,15 @@
 // Plotting the surfaces..
-function daveChart() {
-    var file = document.getElementById('fileSelector').value;
-    var min = $("#slider-range").slider("values", 0) / 100;
-    var max = $("#slider-range").slider("values", 1) / 100;
+function daveChart(placeholder, colorSelector) {
+    var file = document.getElementById('datadraw_fileSelector').value;
+    var min = $("#datadraw_slider-range").slider("values", 0) / 100;
+    var max = $("#datadraw_slider-range").slider("values", 1) / 100;
 
     $.getJSON(file, function(json) {
         console.log(json); // this will show the info it in firebug console
         var todelete = [[]];
 
-// Deletes those point which values are not in specified range.
-        if ($("#cb1").is(':checked')) {
+// Deletes those points which values are not in specified range.
+        if ($("#datadraw_cb1").is(':checked')) {
             for (var i = 0; i < json.arr.length; i++) {
                 todelete.push(new Array());
                 for (var j = 0; j < json.arr[i].length; j++)
@@ -29,7 +29,7 @@ function daveChart() {
         x = json.rowlabels;
         y = x;
 // Deletes those points which similarity equals 1.
-        if ($("#cb2").is(':checked')) {
+        if ($("#datadraw_cb2").is(':checked')) {
             for (var i = 0; i < json.arr.length; i++) {
                 for (var j = 0; j < json.arr[i].length; j++)
                     if (json.arr[i][j] == 1) {
@@ -39,7 +39,7 @@ function daveChart() {
         }
         z = json.arr;
 // Reverse scale of the chart
-        if ($("#cb3").is(':checked'))
+        if ($("#datadraw_cb3").is(':checked'))
             var scalereversed = false;
         else
             var scalereversed = true;
@@ -61,7 +61,7 @@ function daveChart() {
     ['1', 'rgb(191,7,0)']
   ];
 
-  var colorscale = $("#colorSelector").val();
+  var colorscale = $("#"+colorSelector).val();
   if(colorscale == "custom")
     colorscale = customcolorscale;
 
@@ -77,7 +77,7 @@ function daveChart() {
             autocolorscale: false,
             reversescale: scalereversed,
         };
-        var width = $("#drawingCanvas").width;
+        var width = document.getElementById(placeholder).offsetWidth;
         var height = window.innerHeight - 100;
         var layout = {
             scene: {
@@ -97,28 +97,7 @@ function daveChart() {
 
         };
 
-        Plotly.newPlot('drawingCanvas', [data], layout);
+        Plotly.newPlot(placeholder, [data], layout);
     });
 
 }
-
-// function applyScale(val, m) {
-//     if (m === 0) {
-//         document.getElementById('minValue').value = val;
-//         max = document.getElementById('maxValue');
-//         maxS = document.getElementById('maxValueSlider');
-//         if (maxS.value < val) {
-//             maxS.value = val;
-//             max.value = val;
-//         }
-//     } else {
-//         document.getElementById('maxValue').value = val;
-//         min = document.getElementById('minValue');
-//         minS = document.getElementById('minValueSlider');
-//         if (minS.value > val) {
-//             minS.value = val;
-//             min.value = val;
-//         }
-//     }
-//     daveChart();
-// }

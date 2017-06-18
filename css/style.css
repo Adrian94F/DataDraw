@@ -38,3 +38,23 @@ div {
 .ui-draggable, .ui-droppable {
   background-position: top;
 }
+
+#datadraw_holder{
+  display:block;
+  width:150px;
+  height:40px;
+  text-align: center;
+  vertical-align: middle;
+  background-color: #BBB;
+  -moz-border-radius: 5px;
+  -webkit-border-radius: 5px;
+}
+#datadraw_holder span{
+  vertical-align: middle;
+  display:inline-block;;
+  height:100%;
+}
+#datadraw_similarity
+{
+  margin-top: 50px;
+}
