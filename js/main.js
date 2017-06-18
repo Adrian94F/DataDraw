@@ -40,21 +40,15 @@ function datadraw_changeChart(chartName){
     $("#datadraw_drawingCanvas").html("");
     // są brzydkie ify bo o case'y się pluły przeglądarki :(
     if(chartName=="datadraw_heat_map"){
-        $("#datadraw_similarity").show();
-        $("#datadraw_slider-range").show();
         $("#datadraw_plot3d").hide();
         $("#datadraw_heatmap").show();
     }
     if(chartName=="datadraw_scatter_plot"){
-        $("#datadraw_similarity").show();
-        $("#datadraw_slider-range").show();
         $("#datadraw_plot3d").hide();
         $("#datadraw_heatmap").hide();
     }
 
     if(chartName=="datadraw_plot_3d"){
-        $("#datadraw_similarity").show();
-        $("#datadraw_slider-range").show();
         $("#datadraw_heatmap").hide();
         $("#datadraw_plot3d").show();
     }
