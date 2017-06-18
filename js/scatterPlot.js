@@ -7,36 +7,58 @@ function bubble(book_1, book_2, sim) {
     this.z = sim;
 }
 
-function drawAllData() {
-    var similarity = [];
-    var similarity2 = [];
-    var similarity3 = [];
-    var similarity4 = [];
+function drawData(all) {
+    var similarity = [[], [], [], []];
     var rowLabelNames = [];
+    var list = [];
     d3.json("sim2.json", function (data) {
         var select = document.getElementById("select");
+        var select_2 = document.getElementById("select_2");
         originalData = data;
+
+        if (!all) {
+            data = bookData;
+        }
 
         for (var i = 0; i < data.rowlabels.length; i++) {
             for (var j = 0; j < data.arr[i].length; j++) {
                 if (data.arr[i][j] <= 0.25) {
-                    similarity.push(new bubble(i, j, data.arr[i][j]));
+                    similarity[0].push(new bubble(i, j, data.arr[i][j]));
                 } else if (data.arr[i][j] > 0.25 && data.arr[i][j] <= 0.5) {
-                    similarity2.push(new bubble(i, j, data.arr[i][j]));
+                    similarity[1].push(new bubble(i, j, data.arr[i][j]));
                 } else if (data.arr[i][j] > 0.5 && data.arr[i][j] <= 0.75) {
-                    similarity3.push(new bubble(i, j, data.arr[i][j]));
+                    similarity[2].push(new bubble(i, j, data.arr[i][j]));
                 } else if (data.arr[i][j] > 0.75) {
-                    similarity4.push(new bubble(i, j, data.arr[i][j]));
+                    similarity[3].push(new bubble(i, j, data.arr[i][j]));
                 }
             }
-            rowLabelNames.push(data.rowlabels[i]);
-            select.options[select.options.length] = new Option(data.rowlabels[i], data.rowlabels[i]);
+            if (all) {
+                rowLabelNames.push(data.rowlabels[i]);
+            } else {
+                var n = data.rowlabels[i].author + " " + data.rowlabels[i].title + " " + data.rowlabels[i].part;
+                rowLabelNames.push(n);
+            }
+
+            if (all) {
+                var author = data.rowlabels[i].split("_");
+                var a = author[0] + " " + author[1];
+                if ($.inArray(a, list) == -1) {
+                    list.push(a);
+                }
+            }
         }
 
-        var obj = {name: "0-25% similarity", data: similarity, color: "#3333FF", turboThreshold: 100000};
-        var obj2 = {name: "26-50% similarity", data: similarity2, color: "#66B2FF", turboThreshold: 100000};
-        var obj3 = {name: "51-75% similarity", data: similarity3, color: "#FFB266", turboThreshold: 100000};
-        var obj4 = {name: "76-100% similarity", data: similarity4, color: "#FF3333", turboThreshold: 100000};
+        if (all) {
+            for (var k = 0; k < list.length; k++) {
+                select.options[select.options.length] = new Option(list[k], list[k]);
+                select_2.options[select.options.length] = new Option(list[k], list[k]);
+            }
+        }
+
+        var obj = {name: "0-25% similarity", data: similarity[0], color: "#3333FF", turboThreshold: 100000};
+        var obj2 = {name: "26-50% similarity", data: similarity[1], color: "#66B2FF", turboThreshold: 100000};
+        var obj3 = {name: "51-75% similarity", data: similarity[2], color: "#FFB266", turboThreshold: 100000};
+        var obj4 = {name: "76-100% similarity", data: similarity[3], color: "#FF3333", turboThreshold: 100000};
 
         Highcharts.chart('container', {
             chart: {
@@ -120,122 +142,14 @@ function drawAllData() {
 
 function changeBook() {
     var val = document.getElementById("select").value;
-    if(val === 'all') {
-        drawAllData();
-    } else {
-        var names = val.split("_");
-        bookData = JSON.parse(filterByBook(splitTitleFromAuthorForObject(originalData), {author: names[0], title: names[1], part: names[2]}));
-        console.log(bookData);
-        draw();
-    }
+    var val_2 = document.getElementById("select_2").value;
+
+    var names = val.split(" ");
+    var names_2 = val_2.split(" ");
+    bookData = filterByMultipleBooks(splitTitleFromAuthorForObject(originalData), [names[1], names_2[1]]);
+    drawData(false);
 }
 
-function draw() {
-    var similarity = [];
-    var similarity2 = [];
-    var similarity3 = [];
-    var similarity4 = [];
-    var rowLabelNames = [];
-    var currentBook = [];
-    var name = bookData.book.author + " " + bookData.book.title + " " + bookData.book.part;
-    currentBook.push(name);
-    for (var k = 0; k < bookData.arr.length; k++) {
-        if (bookData.arr[k] <= 0.25) {
-            similarity.push(new bubble(k, 0, bookData.arr[k]));
-        } else if (bookData.arr[k] > 0.25 && bookData.arr[k] <= 0.5) {
-            similarity2.push(new bubble(k, 0, bookData.arr[k]));
-        } else if (bookData.arr[k] > 0.5 && bookData.arr[k] <= 0.75) {
-            similarity3.push(new bubble(k, 0, bookData.arr[k]));
-        } else if (bookData.arr[k] > 0.75) {
-            similarity4.push(new bubble(k, 0, bookData.arr[k]));
-        }
-        var n = bookData.rowlabels[k].author + " " + bookData.rowlabels[k].title + " " + bookData.rowlabels[k].part;
-        rowLabelNames.push(n);
-    }
-
-    var obj = {name: "0-25% similarity", data: similarity, color: "#3333FF", turboThreshold: 100000};
-    var obj2 = {name: "26-50% similarity", data: similarity2, color: "#66B2FF", turboThreshold: 100000};
-    var obj3 = {name: "51-75% similarity", data: similarity3, color: "#FFB266", turboThreshold: 100000};
-    var obj4 = {name: "76-100% similarity", data: similarity4, color: "#FF3333", turboThreshold: 100000};
-
-    Highcharts.chart('container', {
-        chart: {
-            type: 'scatter',
-            zoomType: 'xy',
-            panning: true,
-            panKey: 'shift'
-        },
-        title: {
-            text: "Similarity's visualization"
-        },
-        subtitle: {
-            text: 'Books'
-        },
-        xAxis: {
-            title: {
-                enabled: true,
-                text: 'Book'
-            },
-            labels: {
-                formatter: function () {
-                    return rowLabelNames[this.value];
-                }
-            }
-        },
-        zAxis: {
-            title: {
-                enabled: true
-            }
-        },
-        yAxis: {
-            title: {
-                enabled: true,
-                text: 'Book'
-            },
-            labels: {
-                formatter: function () {
-                    return currentBook[this.value];
-                }
-            }
-        },
-        tooltip: {
-            formatter: function () {
-                return 'Book 1:  ' + rowLabelNames[this.x] + '<br>' +
-                    'Book 2: ' + currentBook[this.y] + '<br>' +
-                    'Similarity: ' + bookData.arr[this.x];
-            }
-        },
-        legend: {
-            layout: 'vertical',
-            align: 'left',
-            verticalAlign: 'top',
-            floating: true,
-            backgroundColor: (Highcharts.theme) || '#FFFFFF',
-            borderWidth: 1
-        },
-        plotOptions: {
-            scatter: {
-                marker: {
-                    radius: 5,
-                    states: {
-                        hover: {
-                            enabled: true,
-                            lineColor: 'rgb(100,100,100)'
-                        }
-                    }
-                },
-                states: {
-                    hover: {
-                        marker: {
-                            enabled: false
-                        }
-                    }
-                }
-            }
-        },
-        series: [obj, obj2, obj3, obj4]
-    });
-}
 
 
 

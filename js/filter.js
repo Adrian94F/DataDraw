@@ -7,8 +7,9 @@ splitTitleFromAuthorForJson = function (json) {
 splitTitleFromAuthorForObject = function (object) {
     var rowlabels = [];
 
+    var regex = /[^A-Za-z0-9]/;
     for (var i = 0; i < object.rowlabels.length; i++) {
-        var book = object.rowlabels[i].split("_");
+        var book = object.rowlabels[i].split(regex);
         var author = book[0];
         var title = book[1];
 
@@ -51,7 +52,9 @@ splitTitleFromAuthorForObject = function (object) {
 
 
 filterByBook = function (json, book) {
-    var rowlabels = json.rowlabels;
+
+    var data = JSON.parse(json);
+    var rowlabels = data.rowlabels;
 
     var bookIndex = findBookIndex(rowlabels, book);
 
@@ -59,18 +62,18 @@ filterByBook = function (json, book) {
         return "No results";
     }
 
-    var result = { rowlabels: rowlabels, book: rowlabels[bookIndex] };
+    var result = { book: rowlabels[bookIndex] };
 
-    if (json.arr) {
-        result.arr = json.arr[bookIndex];
+    if (data.arr) {
+        result.arr = data.arr[bookIndex];
     }
 
-    if (json.clusters) {
-        result.clusters = json.clusters[bookIndex];
+    if (data.clusters) {
+        result.clusters = data.clusters[bookIndex];
     }
 
-    if (json.collabels) {
-        result.collabels = json.collabels[bookIndex];
+    if (data.collabels) {
+        result.collabels = data.collabels[bookIndex];
     }
 
     return JSON.stringify(result);
@@ -112,6 +115,83 @@ filterByBookAndScore = function (json, book, score) {
     return JSON.stringify({ rowlabels: filteredRowlabels, arr: filteredScores });
 }
 
+filterByAuthor = function (data, author) {
+    var newRowlabels = [];
+    var similarities = [];
+
+    var indexes = [];
+    for (var i = 0; i < data.rowlabels.length; i++) {
+        if (data.rowlabels[i].author === author) {
+            indexes.push(i);
+            newRowlabels.push(data.rowlabels[i]);
+        }
+    }
+
+    for (var i = 0; i < indexes.length; i++) {
+        var similarity = [];
+        for (var j = 0; j < indexes.length; j++) {
+            similarity.push(data.arr[indexes[i]][indexes[j]]);
+        }
+        similarities.push(similarity);
+    }
+
+    return { rowlabels: newRowlabels, arr: similarities };
+}
+
+
+filterByMultipleAuthors = function (data, authors) {
+    let newRowlabels = [];
+    let similarities = [];
+
+    let indexes = [];
+    for (let i = 0; i < data.rowlabels.length; i++) {
+        for (let j = 0; j < authors.length; j++) {
+            if (data.rowlabels[i].author === authors[j]) {
+                indexes.push(i);
+                newRowlabels.push(data.rowlabels[i]);
+            }
+        }
+    }
+
+    for (let i = 0; i < indexes.length; i++) {
+        let similarity = [];
+        for (let j = 0; j < indexes.length; j++) {
+            similarity.push(data.arr[indexes[i]][indexes[j]]);
+        }
+        similarities.push(similarity);
+    }
+
+    return { rowlabels: newRowlabels, arr: similarities };
+}
+
+filterByMultipleBooks = function (data, bookTitles) {
+    let newRowlabels = [];
+    let similarities = [];
+
+    console.log(bookTitles);
+
+    let indexes = [];
+    for (let i = 0; i < data.rowlabels.length; i++) {
+        for (let j = 0; j < bookTitles.length; j++) {
+            if (data.rowlabels[i].title === bookTitles[j]) {
+                indexes.push(i);
+                newRowlabels.push(data.rowlabels[i]);
+            }
+        }
+    }
+
+    for (let i = 0; i < indexes.length; i++) {
+        let similarity = [];
+        for (let j = 0; j < indexes.length; j++) {
+            similarity.push(data.arr[indexes[i]][indexes[j]]);
+        }
+        similarities.push(similarity);
+    }
+
+    return { rowlabels: newRowlabels, arr: similarities };
+}
+
+
 var findBookIndex = function (rowlabels, book) {
     if (book.part) {
         return rowlabels.findIndex((element) => element.author === book.author && element.title === book.title && element.part === book.part);
@@ -119,6 +199,3 @@ var findBookIndex = function (rowlabels, book) {
         return rowlabels.findIndex((element) => element.author === book.author && element.title === book.title);
     }
 }
-
-
-
