@@ -7,7 +7,22 @@ function daveChart() {
     $.getJSON(file, function(json) {
         console.log(json); // this will show the info it in firebug console
         var todelete = [[]];
-
+        var tmp = 0;
+        console.log("Transforming...");
+        for (var i = 0; i < json.arr.length; i++) {
+            for (var j = 0; j < json.arr[i].length; j++) {
+                if (json.arr[i][j] === json.arr[j][i]) {
+                    if (tmp % 2 === 0) {
+                        json.arr[i][j] = 0;
+                        tmp++;
+                    } else {
+                        json.arr[j][i] = 0;
+                        tmp++;
+                    }
+                }
+            }
+        }
+        console.log("Done.");
 // Deletes those point which values are not in specified range.
         if ($("#cb1").is(':checked')) {
             for (var i = 0; i < json.arr.length; i++) {
@@ -37,6 +52,7 @@ function daveChart() {
                     }
             }
         }
+
         z = json.arr;
 // Reverse scale of the chart
         if ($("#cb3").is(':checked'))
