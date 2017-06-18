@@ -10,22 +10,13 @@
 				<option value="data/2/weighted.json">weighted 2</option>
 			</select>
 
-			<!-- <div id="colorScaleDiv">
-				<h3>Colors:</h3>
-				<div class="radio">
-					<label><input type="radio" name="colorRadio" value="0" checked>Green to red</label>
-				</div>
-				<div class="radio">
-					<label><input type="radio" name="colorRadio" value="1">Red to green</label>
-				</div>
-
-				<h3>Scale:</h3>
-				<div>
-					<input type="range" id="minValueSlider" min="0" max="1" step="0.0001" value="0" onchange="updateTextInput(this.value, 0);">
-					<input type="text" id="minValue" value="0" size="2">
-				</div>
-				<div>
-					<input type="range" id="maxValueSlider" min="0" max="1" step="0.0001" value="1" onchange="updateTextInput(this.value, 1);">
-					<input type="text" id="maxValue" value="1" size="2">
-				</div>
-			</div> -->
+            <h3>Choose books</h3>
+            <select id="select" style="margin-bottom: 20px">
+                <option value="all"></option>
+            </select>
+            <select id="select_2" style="margin-bottom: 20px">
+                <option value="all"></option>
+            </select>
+            <button id="button" onclick="changeBook('drawingCanvas')">
+                Filter
+            </button>

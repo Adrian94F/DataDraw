@@ -25,12 +25,13 @@
 	<script src="js/chart.js"></script>
 
 	<!-- scatterplot -->
+    <script src="js/filter.js"></script>
 	<script src="js/scatterPlot.js"> </script>
 	<script src="js/highcharts.js"></script>
 	<script src="js/exporting.js"></script>
 	
 </head>
-<body id="drop_zone" onload='d3scatterPlot("#drawingCanvas");'>
+<body id="drop_zone" onload="drawData(true, 'drawingCanvas');">
 	<header>
 		<?php include("header.php") ?>
 	</header>

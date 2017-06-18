@@ -7,7 +7,7 @@ function bubble(book_1, book_2, sim) {
     this.z = sim;
 }
 
-function drawData(all) {
+function drawData(all, drawMeHere) {
     var similarity = [[], [], [], []];
     var rowLabelNames = [];
     var list = [];
@@ -60,7 +60,7 @@ function drawData(all) {
         var obj3 = {name: "51-75% similarity", data: similarity[2], color: "#FFB266", turboThreshold: 100000};
         var obj4 = {name: "76-100% similarity", data: similarity[3], color: "#FF3333", turboThreshold: 100000};
 
-        Highcharts.chart('container', {
+        Highcharts.chart(drawMeHere, {
             chart: {
                 type: 'scatter',
                 zoomType: 'xy',
@@ -140,14 +140,14 @@ function drawData(all) {
     });
 }
 
-function changeBook() {
+function changeBook(drawMeHere) {
     var val = document.getElementById("select").value;
     var val_2 = document.getElementById("select_2").value;
 
     var names = val.split(" ");
     var names_2 = val_2.split(" ");
     bookData = filterByMultipleBooks(splitTitleFromAuthorForObject(originalData), [names[1], names_2[1]]);
-    drawData(false);
+    drawData(false, drawMeHere);
 }
 
 
