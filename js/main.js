@@ -16,10 +16,10 @@ function datadraw_initUI() {
         max: 100,
         values: [ 0, 100 ],
         change: function( event, ui ) {datadraw_drawChart();},
-        slide: function( event, ui ) {$( "#datadraw_amount" ).val( "%" + ui.values[ 0 ] + " - %" + ui.values[ 1 ] );}
+        slide: function( event, ui ) {$( "#datadraw_amount" ).val( ui.values[ 0 ] + "% - " + ui.values[ 1 ] + "%");}
     });
-    $( "#datadraw_amount" ).val( "%" + $( "#datadraw_slider-range" ).slider( "values", 0 ) +
-        " - %" + $( "#datadraw_slider-range" ).slider( "values", 1 ) );
+    $( "#datadraw_amount" ).val( $( "#datadraw_slider-range" ).slider( "values", 0 ) +
+        "% - " + $( "#datadraw_slider-range" ).slider( "values", 1 ) + "%" );
     fillBooks();
 }
 
@@ -46,8 +46,8 @@ function datadraw_changeChart(chartName){
         $("#datadraw_heatmap").show();
     }
     if(chartName=="datadraw_scatter_plot"){
-        $("#datadraw_similarity").hide();
-        $("#datadraw_slider-range").hide();
+        $("#datadraw_similarity").show();
+        $("#datadraw_slider-range").show();
         $("#datadraw_plot3d").hide();
         $("#datadraw_heatmap").hide();
     }

@@ -67,13 +67,13 @@
 
 				<div id="datadraw_similarity">
 					<h3>Similarity range:</h3>
-					<input type="text" id="datadraw_amount" readonly style="background:none;border:0; color:#f6931f; font-weight:bold;">
+					<input type="text" id="datadraw_amount" readonly style="background:none;border:0;  font-weight:bold;">
 				</div>
 				<div id="datadraw_slider-range"></div>
 			</div>
 
 			<div id="datadraw_plot3d">
-				<br />
+				<h3>Scale:</h3>
 				<label for="datadraw_cb1"><input id="datadraw_cb1" type="checkbox" onclick="datadraw_handleClick(this);">Hide objects which are not in scale</label><br />
 				<label for="datadraw_cb2"><input id="datadraw_cb2" type="checkbox" onclick="datadraw_handleClick(this);">Hide similarity of the same objects</label><br />
 				<label for="datadraw_cb3"><input id="datadraw_cb3" type="checkbox" onclick="datadraw_handleClick(this);">Reverse scale</label><br />
@@ -94,7 +94,7 @@
 
 			<div id="datadraw_heatmap">
 				<div id="datadraw_colorScaleDiv">
-					<h3>Colors:</h3>
+					<h3>Scale:</h3>
 					<div class="radio">
 						<label><input type="radio" name="colorRadio" value="0" checked onchange="datadraw_handleClick(this)">Green to red</label>
 					</div>
@@ -104,7 +104,7 @@
 				</div>
 			</div>
 			<div id="datadraw_filterbooks">
-				<h3>Choose books</h3>
+				<h3>Books filter</h3>
 				<select id="datadraw_filterbooks_select" style="margin-bottom: 20px">
 					<option value="all"></option>
 				</select>
