@@ -1,42 +1,49 @@
-var similarity = [];
-var similarity2 = [];
-var similarity3 = [];
-var similarity4 = [];
-var rowLabelNames = [];
+var bookData;
+var originalData;
 
-function d3scatterPlot(){
-    // $("#drawingCanvas").html("");
-    // $("#colorScaleDiv").hide();
-    var file = document.getElementById('fileSelector').value;
+function bubble(book_1, book_2, sim) {
+    this.x = book_1;
+    this.y = book_2;
+    this.z = sim;
+}
+
+function datadraw_scatter_plot(all, placeholder, range, fileSelector, colorSelector, cb1, cb2, cb3) {
+    var similarity = [[], [], [], []];
+    var rowLabelNames = [];
+    var file = document.getElementById(fileSelector).value;
     d3.json(file, function (data) {
+        originalData = data;
 
-        function bubble(book_1, book_2, sim) {
-            this.x = book_1;
-            this.y = book_2;
-            this.z = sim;
+        if (!all) {
+            data = bookData;
         }
 
         for (var i = 0; i < data.rowlabels.length; i++) {
-            for (var j = 0; j < data.rowlabels.length; j++) {
+            for (var j = 0; j < data.arr[i].length; j++) {
                 if (data.arr[i][j] <= 0.25) {
-                    similarity.push(new bubble(i, j, data.arr[i][j]));
+                    similarity[0].push(new bubble(i, j, data.arr[i][j]));
                 } else if (data.arr[i][j] > 0.25 && data.arr[i][j] <= 0.5) {
-                    similarity2.push(new bubble(i, j, data.arr[i][j]));
+                    similarity[1].push(new bubble(i, j, data.arr[i][j]));
                 } else if (data.arr[i][j] > 0.5 && data.arr[i][j] <= 0.75) {
-                    similarity3.push(new bubble(i, j, data.arr[i][j]));
-                } else if (data.arr[i][j] > 0.75 && data.arr[i][j] < 1) {
-                    similarity4.push(new bubble(i, j, data.arr[i][j]));
+                    similarity[2].push(new bubble(i, j, data.arr[i][j]));
+                } else if (data.arr[i][j] > 0.75) {
+                    similarity[3].push(new bubble(i, j, data.arr[i][j]));
                 }
             }
-            rowLabelNames.push(data.rowlabels[i]);
+            if (all) {
+                rowLabelNames.push(data.rowlabels[i]);
+            } else {
+                var n = data.rowlabels[i].author + " " + data.rowlabels[i].title + " " + data.rowlabels[i].part;
+                rowLabelNames.push(n);
+            }
         }
 
-        var obj = {name: "0-25%", data: similarity, color: "green", turboThreshold: 100000};
-        var obj2 = {name: "26-50%", data: similarity2, color: "yellow", turboThreshold: 100000};
-        var obj3 = {name: "51-75%", data: similarity3, color: "orange", turboThreshold: 100000};
-        var obj4 = {name: "76-100%", data: similarity4, color: "red", turboThreshold: 100000};
+        var obj = {name: "0-25% similarity", data: similarity[0], color: "#3333FF", turboThreshold: 100000};
+        var obj2 = {name: "26-50% similarity", data: similarity[1], color: "#66B2FF", turboThreshold: 100000};
+        var obj3 = {name: "51-75% similarity", data: similarity[2], color: "#FFB266", turboThreshold: 100000};
+        var obj4 = {name: "76-100% similarity", data: similarity[3], color: "#FF3333", turboThreshold: 100000};
 
-        Highcharts.chart('drawingCanvas', {
+        Highcharts.chart(placeholder, {
             chart: {
                 type: 'scatter',
                 zoomType: 'xy',
@@ -44,7 +51,7 @@ function d3scatterPlot(){
                 panKey: 'shift'
             },
             title: {
-                text: "Data visualization"
+                text: "Similarity's visualization"
             },
             subtitle: {
                 text: 'Books'
@@ -80,7 +87,7 @@ function d3scatterPlot(){
                 formatter: function () {
                     return 'Book 1:  ' + rowLabelNames[this.x] + '<br>' +
                         'Book 2: ' + rowLabelNames[this.y] + '<br>' +
-                        'Value: ' + data.arr[this.x][this.y];
+                        'Similarity: ' + data.arr[this.x][this.y];
                 }
             },
             legend: {
@@ -116,8 +123,12 @@ function d3scatterPlot(){
     });
 }
 
+function datadraw_changeBook(placeholder, fileSelector) {
+    var val = document.getElementById("datadraw_filterbooks_select").value;
+    var val_2 = document.getElementById("datadraw_filterbooks_select_2").value;
 
-
-
-
-
+    var names = val.split(" ");
+    var names_2 = val_2.split(" ");
+    bookData = filterByMultipleBooks(splitTitleFromAuthorForObject(originalData), [names[1], names_2[1]]);
+    datadraw_scatter_plot(false, placeholder, null, fileSelector);
+}
