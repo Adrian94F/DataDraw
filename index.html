@@ -3,6 +3,7 @@
 <html>
 <head>
 	<link rel="stylesheet" href="css/bootstrap.min.css" />
+	<link rel="stylesheet" href="css/bootstrap-multiselect.css" type="text/css"/>
 	<link rel="stylesheet" href="css/font-awesome.css" />
 	<link rel="stylesheet" href="css/jquery-ui.css">
 	<link rel="shortcut icon" type="image/png" href="img/favicon.png"/>
@@ -14,6 +15,10 @@
 	<script src="js/jquery.min.js"></script>
 	<script src="js/jquery-ui.js"></script>
 	<script src="js/main.js"></script>
+
+	<!-- Bootstrap & Multiselect -->
+	<script src="js/bootstrap.min.js"></script>
+	<script src="js/bootstrap-multiselect.js"></script>
 
 	<!-- filters -->
 	<script src="js/filter.js"></script>
@@ -65,14 +70,15 @@
 					<option value="data/2/weighted.json">weighted 2</option>
 				</select>
 
-				<h3>Similarity range:</h3>
-				<input type="text" id="datadraw_amount" readonly style="background:none;border:0;  font-weight:bold;">
+				<div id="datadraw_similarity">
+					<h3>Similarity range:</h3>
+					<input type="text" id="datadraw_amount" readonly style="background:none;border:0; color:#f6931f; font-weight:bold;">
+				</div>
 				<div id="datadraw_slider-range"></div>
-
 			</div>
 
 			<div id="datadraw_plot3d">
-				<h3>Scale:</h3>
+				<br />
 				<label for="datadraw_cb1"><input id="datadraw_cb1" type="checkbox" onclick="datadraw_handleClick(this);">Hide objects which are not in scale</label><br />
 				<label for="datadraw_cb2"><input id="datadraw_cb2" type="checkbox" onclick="datadraw_handleClick(this);">Hide similarity of the same objects</label><br />
 				<label for="datadraw_cb3"><input id="datadraw_cb3" type="checkbox" onclick="datadraw_handleClick(this);">Reverse scale</label><br />
@@ -93,7 +99,7 @@
 
 			<div id="datadraw_heatmap">
 				<div id="datadraw_colorScaleDiv">
-					<h3>Scale:</h3>
+					<h3>Colors:</h3>
 					<div class="radio">
 						<label><input type="radio" name="colorRadio" value="0" checked onchange="datadraw_handleClick(this)">Green to red</label>
 					</div>
@@ -103,11 +109,8 @@
 				</div>
 			</div>
 			<div id="datadraw_filterbooks">
-				<h3>Books filter</h3>
-				<select id="datadraw_filterbooks_select" style="margin-bottom: 20px">
-					<option value="all"></option>
-				</select>
-				<select id="datadraw_filterbooks_select_2" style="margin-bottom: 20px">
+				<h3>Choose books</h3>
+				<select id="datadraw_filterbooks_select" style="margin-bottom: 20px" multiple>
 					<option value="all"></option>
 				</select>
 				<button id="datadraw_filterbooks_button" onclick="datadraw_changeBook('datadraw_drawingCanvas', 'datadraw_fileSelector')">
