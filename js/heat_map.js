@@ -1,31 +1,27 @@
-function datadraw_heat_map(all, placeholder, range, fileSelector, colorSelector, cb1, cb2, cb3, cb4) {
+function datadraw_heat_map(placeholder, range, fileSelector, colorSelector, cb1, cb2, cb3, cb4) {
     $("#"+placeholder).html("");
     var domain = [];
     var scales = [["#fff", "#ff1100", "#ff2200", "#ff3300", "#ff4400", "#ff5500", "#ff6600", "#ff7700", "#ff8800", "#ff9900", "#ffaa00", "#ffbb00", "#ffcc00", "#ffdd00", "#ffee00", "#ffff00", "#eeff00", "#ddff00", "#ccff00", "#bbff00", "#aaff00", "#99ff00", "#88ff00", "#77ff00", "#66ff00", "#55ff00", "#44ff00", "#33ff00", "#22ff00", "#11ff00", "#fff"],
-        ["#fff", "#11ff00", "#22ff00", "#33ff00", "#44ff00", "#55ff00", "#66ff00", "#77ff00", "#88ff00", "#99ff00", "#aaff00", "#bbff00", "#ccff00", "#ddff00", "#eeff00", "#ffff00", "#ffee00", "#ffdd00", "#ffcc00", "#ffbb00", "#ffaa00", "#ff9900", "#ff8800", "#ff7700", "#ff6600", "#ff5500", "#ff4400", "#ff3300", "#ff2200", "#ff1100", "#fff"]];
+    ["#fff", "#11ff00", "#22ff00", "#33ff00", "#44ff00", "#55ff00", "#66ff00", "#77ff00", "#88ff00", "#99ff00", "#aaff00", "#bbff00", "#ccff00", "#ddff00", "#eeff00", "#ffff00", "#ffee00", "#ffdd00", "#ffcc00", "#ffbb00", "#ffaa00", "#ff9900", "#ff8800", "#ff7700", "#ff6600", "#ff5500", "#ff4400", "#ff3300", "#ff2200", "#ff1100", "#fff"]];
 
     var minValue = $("#"+range).slider("values", 0)/100;
     var maxValue = $("#"+range).slider("values", 1)/100;
     var n = 31;
     for (i=0; i<n; i++) {
-        domain.push((((maxValue - minValue) / n * i) + minValue) * 255);
+        domain.push((((maxValue - minValue) / n * i)) * 255);
     }
-    var file = document.getElementById(fileSelector).value;
-    datadraw_heat_mapDraw(placeholder, file, domain, scales[$('input[type=radio][name=colorRadio]:checked').val()]);
+    
+    datadraw_heat_mapDraw(placeholder, domain, scales[$('input[type=radio][name=colorRadio]:checked').val()]);
 }
 
-function datadraw_heat_mapDraw(placeholder, filename, mapDomain, mapScale) {
-    d3.json(filename, function (error, heatmap) {
-        if (error) {
-            alert("Unable to load file: " + error);
-            return;
-        }
-        var X = 0, Y = 1;
-        var canvasDim = [$("#" + placeholder).width, window.innerHeight - 100];
-        var canvasAspect = canvasDim[Y] / canvasDim[X];
-        var heatmapDim = [heatmap.rowlabels.length, heatmap.rowlabels.length];
-        var heatmapAspect = heatmapDim[Y] / heatmapDim[X];
-        var tickDivisor = Math.pow(10,Math.floor(Math.log10(heatmapDim[X])/2));
+function datadraw_heat_mapDraw(placeholder, mapDomain, mapScale) {
+    var heatmap =  window.datadraw_data;
+    var X = 0, Y = 1;
+    var canvasDim = [$("#" + placeholder).width, window.innerHeight - 100];
+    var canvasAspect = canvasDim[Y] / canvasDim[X];
+    var heatmapDim = [heatmap.rowlabels.length, heatmap.rowlabels.length];
+    var heatmapAspect = heatmapDim[Y] / heatmapDim[X];
+    var tickDivisor = Math.pow(10,Math.floor(Math.log10(heatmapDim[X])/2));
         //alert(tickDivisor.toString());
         if (heatmapAspect < canvasAspect)
             canvasDim[Y] = canvasDim[X] * heatmapAspect;
@@ -33,73 +29,73 @@ function datadraw_heat_mapDraw(placeholder, filename, mapDomain, mapScale) {
             canvasDim[X] = canvasDim[Y] / heatmapAspect;
 
         var color = d3.scale.linear()
-            .domain(mapDomain)
-            .range(mapScale);
+        .domain(mapDomain)
+        .range(mapScale);
 
         var scale = [
-            d3.scale.linear()
-                .domain([0, heatmapDim[X]])
-                .range([0, canvasDim[X]]),
-            d3.scale.linear()
-                .domain([0, heatmapDim[Y]])
-                .range([canvasDim[Y], 0])
+        d3.scale.linear()
+        .domain([0, heatmapDim[X]])
+        .range([0, canvasDim[X]]),
+        d3.scale.linear()
+        .domain([0, heatmapDim[Y]])
+        .range([canvasDim[Y], 0])
         ];
 
         var body = d3.select("#" + placeholder);
 
         var canvas = body.append("canvas")
-            .attr("width", heatmapDim[X])
-            .attr("height", heatmapDim[Y])
-            .style("width", canvasDim[X] + "px")
-            .style("height", canvasDim[Y] + "px")
-            .style("position", "absolute");
+        .attr("width", heatmapDim[X])
+        .attr("height", heatmapDim[Y])
+        .style("width", canvasDim[X] + "px")
+        .style("height", canvasDim[Y] + "px")
+        .style("position", "absolute");
 
         var svg = body.append("svg")
-            .attr("width", canvasDim[X])
-            .attr("height", canvasDim[Y])
-            .style("position", "relative");
+        .attr("width", canvasDim[X])
+        .attr("height", canvasDim[Y])
+        .style("position", "relative");
 
         var zoom = d3.behavior.zoom()
-            .center(canvasDim.map(
-                function (v) {
-                    return v / 2
-                }))
-            .scaleExtent([1, 10])
-            .x(scale[X])
-            .y(scale[Y])
-            .on("zoom", datadraw_zoomEvent);
+        .center(canvasDim.map(
+            function (v) {
+                return v / 2
+            }))
+        .scaleExtent([1, 10])
+        .x(scale[X])
+        .y(scale[Y])
+        .on("zoom", datadraw_zoomEvent);
 
         svg.append("rect")
-            .style("pointer-events", "all")
-            .attr("width", canvasDim[X])
-            .attr("height", canvasDim[Y])
-            .style("fill", "none")
-            .call(zoom);
+        .style("pointer-events", "all")
+        .attr("width", canvasDim[X])
+        .attr("height", canvasDim[Y])
+        .style("fill", "none")
+        .call(zoom);
 
         var axis = [
-            d3.svg.axis()
-                .scale(scale[X])
-                .tickFormat(function(d) {
-                    return heatmap.rowlabels[d];
-                })
-                .orient("top")
-                .ticks(heatmapDim[X] / tickDivisor),
-            d3.svg.axis()
-                .scale(scale[Y])
-                .tickFormat(function(d) {
-                    return heatmap.rowlabels[d];
-                })
-                .orient("right")
-                .ticks(heatmapDim[Y] / tickDivisor)
+        d3.svg.axis()
+        .scale(scale[X])
+        .tickFormat(function(d) {
+            return heatmap.rowlabels[d];
+        })
+        .orient("top")
+        .ticks(heatmapDim[X] / tickDivisor),
+        d3.svg.axis()
+        .scale(scale[Y])
+        .tickFormat(function(d) {
+            return heatmap.rowlabels[d];
+        })
+        .orient("right")
+        .ticks(heatmapDim[Y] / tickDivisor)
         ];
 
         var axisElement = [
-            svg.append("g")
-                .attr("class", "x axis")
-                .attr("transform", "translate(0," + canvasDim[Y] + ")")
-                .call(axis[X]),
-            svg.append("g")
-                .attr("class", "y axis")
+        svg.append("g")
+        .attr("class", "x axis")
+        .attr("transform", "translate(0," + canvasDim[Y] + ")")
+        .call(axis[X]),
+        svg.append("g")
+        .attr("class", "y axis")
         ];
 
         function datadraw_drawAxes() {
@@ -156,5 +152,4 @@ function datadraw_heat_mapDraw(placeholder, filename, mapDomain, mapScale) {
             context.drawImage(imageObj, it[X], it[Y], n[X], n[Y]);
             datadraw_drawAxes();
         }
-    });
 }

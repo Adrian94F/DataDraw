@@ -1,12 +1,11 @@
 // Plotting the surfaces..
-function datadraw_plot_3d(all, placeholder, range, fileSelector, colorSelector, cb1, cb2, cb3, cb4) {
+function datadraw_plot_3d(placeholder, range, fileSelector, colorSelector, cb1, cb2, cb3, cb4) {
     var file = document.getElementById(fileSelector).value;
     var min = $("#"+range).slider("values", 0)/100;
     var max = $("#"+range).slider("values", 1)/100;
+    var json = window.datadraw_data;
+    var todelete = [[]];
 
-    $.getJSON(file, function(json) {
-        console.log(json); // this will show the info it in firebug console
-        var todelete = [[]];
 // Deletes those points which values are not in specified range.
 if ($("#"+cb1).is(':checked')) {
     for (var i = 0; i < json.arr.length; i++) {
@@ -111,10 +110,7 @@ var layout = {
         t: 100,
         pad: 4
     },
-
 };
 
 Plotly.newPlot(placeholder, [data], layout);
-});
-
 }
