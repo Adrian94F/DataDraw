@@ -8,7 +8,7 @@ function datadraw_heat_map(placeholder, range, fileSelector, colorSelector, cb1,
     var maxValue = $("#"+range).slider("values", 1)/100;
     var n = 31;
     for (i=0; i<n; i++) {
-        domain.push((((maxValue - minValue) / n * i)) * 255);
+        domain.push((((maxValue - minValue) / n * i) + minValue) * 255);
     }
     
     datadraw_heat_mapDraw(placeholder, domain, scales[$('input[type=radio][name=colorRadio]:checked').val()]);
