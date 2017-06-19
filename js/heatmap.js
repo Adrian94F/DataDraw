@@ -9,7 +9,7 @@ function d3map(drawmeHere) {
     var maxValue = document.getElementById('maxValueSlider').value;
     var n = 31;
     for (i=0; i<n; i++) {
-        domain.push((((maxValue - minValue) / n * i) + minValue) * 255);
+        domain.push((((maxValue - minValue) / n * i)) * 255);
     }
     var file = document.getElementById('fileSelector').value;
     d3mapDraw(drawmeHere, file, domain, scales[$('input[type=radio][name=colorRadio]:checked').val()]);
