@@ -3,6 +3,7 @@
 <html>
 <head>
 	<link rel="stylesheet" href="css/bootstrap.min.css" />
+	<link rel="stylesheet" href="css/bootstrap-multiselect.css" type="text/css"/>
 	<link rel="stylesheet" href="css/font-awesome.css" />
 	<link rel="stylesheet" href="css/jquery-ui.css">
 	<link rel="shortcut icon" type="image/png" href="img/favicon.png"/>
@@ -14,6 +15,10 @@
 	<script src="js/jquery.min.js"></script>
 	<script src="js/jquery-ui.js"></script>
 	<script src="js/main.js"></script>
+
+	<!-- Bootstrap & Multiselect -->
+	<script src="js/bootstrap.min.js"></script>
+	<script src="js/bootstrap-multiselect.js"></script>
 
 	<!-- filters -->
 	<script src="js/filter.js"></script>
@@ -105,10 +110,7 @@
 			</div>
 			<div id="datadraw_filterbooks">
 				<h3>Choose books</h3>
-				<select id="datadraw_filterbooks_select" style="margin-bottom: 20px">
-					<option value="all"></option>
-				</select>
-				<select id="datadraw_filterbooks_select_2" style="margin-bottom: 20px">
+				<select id="datadraw_filterbooks_select" style="margin-bottom: 20px" multiple>
 					<option value="all"></option>
 				</select>
 				<button id="datadraw_filterbooks_button" onclick="datadraw_changeBook('datadraw_drawingCanvas', 'datadraw_fileSelector')">
